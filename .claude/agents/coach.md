@@ -62,27 +62,29 @@ Verify the launchpad is in good shape.
 
 After making improvements to agent/rule/skill files, push them to the launchpad repo so all projects benefit.
 
-1. Pull latest first:
+1. Run /checkpoint to save current project state before making changes.
+
+2. Pull latest first:
    ```
    git pull origin main --rebase
    ```
 
-2. Stage ONLY the files you changed:
+3. Stage ONLY the files you changed:
    ```
    git add .claude/agents/[changed-file].md
    ```
 
-3. Commit with a clear message:
+4. Commit with a clear message:
    ```
    git commit -m "coach: [what was improved and why]"
    ```
 
-4. Push:
+5. Push:
    ```
    git push origin main
    ```
 
-5. If push fails (another Coach beat you):
+6. If push fails (another Coach beat you):
    - Run: `git pull origin main --rebase`
    - If rebase succeeds (no conflicts): push again
    - If rebase fails with CONFLICT on a file:
