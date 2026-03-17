@@ -1,0 +1,38 @@
+# Environment & Secrets
+.env
+.env.local
+.env.production
+.env.*.local
+
+# Claude Code local files
+.claude/settings.local.json
+.claude/agent-memory-local/
+.claude/compaction-snapshots/
+
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Build output
+dist/
+build/
+.next/
+out/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+npm-debug.log*
