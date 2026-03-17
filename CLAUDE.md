@@ -24,6 +24,7 @@ This is a **template launchpad** for vibe-coding apps with Claude Code. Copy `.c
 - `/review` - Run a code review on recent changes
 - `/sync-launchpad` - Pull latest agents, rules, and skills from the launchpad repo
 - `/sync-launchpad --dry-run` - Preview what would change without applying
+- `/setup-launchpad` - First-time setup: pull the full launchpad into a new or existing project
 
 ## Important Rules
 - ALWAYS use the architect agent before building a new feature or making big changes
