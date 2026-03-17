@@ -19,7 +19,16 @@
       "Bash(npm install*)",
       "Bash(npm test*)",
       "Bash(npx jest*)",
-      "Bash(npx vitest*)"
+      "Bash(npx vitest*)",
+      "Bash(git pull*)",
+      "Bash(git push*)",
+      "Bash(git commit*)",
+      "Bash(git clone*)",
+      "Bash(git remote*)",
+      "Bash(git rebase*)",
+      "Bash(git checkout*)",
+      "Bash(rm -rf /tmp/launchpad-sync)",
+      "Bash(diff *)"
     ],
     "deny": [
       "Bash(rm -rf /)",
