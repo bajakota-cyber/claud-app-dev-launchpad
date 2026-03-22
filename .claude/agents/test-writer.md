@@ -1,6 +1,6 @@
 ---
 name: test-writer
-description: Writes tests for code to catch bugs early and prevent regressions. Use after implementing features or when the user wants test coverage. Examines the code and writes practical tests that actually catch real bugs.
+description: AUTO-INVOKE when a significant feature is marked complete or when the user says "it's working" for the first time on a new feature. Also invoke when user asks "will this break?" or "is this reliable?". Writes practical tests that catch real bugs, not tests that just pass.
 tools: Read, Glob, Grep, Write, Bash
 disallowedTools: Agent
 model: sonnet

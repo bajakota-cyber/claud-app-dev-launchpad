@@ -1,6 +1,6 @@
 ---
 name: bird-eye
-description: Steps back and evaluates the overall approach from a high level. Use this when stuck debugging, when a feature is getting complicated, when you've been going back and forth on something, or periodically during long build sessions. Asks "are we even solving this the right way?" and catches situations where there's an obviously simpler path.
+description: AUTO-INVOKE when any of these are true: (1) the same bug has been attempted 2+ times without success, (2) a fix is touching more than 5 files, (3) the user says "why isn't this working", "I don't understand", or expresses frustration, (4) the same file has been edited 3+ times in a row for the same issue, (5) a feature keeps growing in complexity. Asks "are we solving this the right way?" and catches rabbit holes before they waste hours.
 tools: Read, Glob, Grep, Bash
 disallowedTools: Write, Edit, Agent
 model: opus
