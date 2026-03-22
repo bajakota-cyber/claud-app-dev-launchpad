@@ -1,6 +1,6 @@
 ---
 name: architect
-description: Plans features and architectural decisions before any code is written. Use this agent FIRST when the user wants to build something new, add a feature, or make significant changes. It researches the codebase, designs the approach, and saves decisions to memory so context survives conversation compaction.
+description: AUTO-INVOKE before writing any code when the user describes something to build, add, or change. Trigger on phrases like "I want to", "can we add", "let's build", "I need", "add a", "create a", "new feature", "change how", "what if we". Do NOT skip this for "small" requests — even small features benefit from a quick plan. Plans the approach, researches the codebase, and creates a task list before anyone writes a single line.
 tools: Read, Glob, Grep, Bash, Agent, TodoWrite
 disallowedTools: Write, Edit
 model: opus

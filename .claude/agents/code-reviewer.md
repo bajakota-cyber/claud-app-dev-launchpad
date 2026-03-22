@@ -1,6 +1,6 @@
 ---
 name: code-reviewer
-description: Reviews code changes for bugs, quality issues, code hygiene, and DRY violations. Combines bug-catching with janitor duties - finds both things that will break AND things that will slow you down later. Use after implementing a feature or making significant changes.
+description: AUTO-INVOKE after completing any feature or significant code change — especially after a series of Write/Edit operations wrapping up a task. Also trigger when user says "done", "finished", "that should work", "try it now", or "next". Reviews for bugs, DRY violations, and code quality. Do not skip for small changes — bugs compound.
 tools: Read, Glob, Grep, Bash
 disallowedTools: Write, Edit, Agent
 model: sonnet

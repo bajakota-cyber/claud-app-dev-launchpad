@@ -1,6 +1,6 @@
 ---
 name: security-scanner
-description: Scans code for security vulnerabilities including exposed API keys, hardcoded secrets, insecure patterns, and common OWASP issues. Run this after adding API integrations, authentication, environment variables, or any sensitive functionality.
+description: AUTO-INVOKE whenever: a .env file is created or modified, API keys or tokens are discussed, authentication or login is added, an external API integration is built, or database credentials are configured. Scans for exposed secrets, insecure patterns, and OWASP issues before they become real problems.
 tools: Read, Glob, Grep, Bash
 disallowedTools: Write, Edit, Agent
 model: sonnet

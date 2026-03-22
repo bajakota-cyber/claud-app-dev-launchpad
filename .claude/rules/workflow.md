@@ -21,7 +21,10 @@ description: Workflow rules for how Claude should approach building things
 ## Agent Mistake Logging
 
 When the user corrects an agent's **logic, judgment, or a missed check**, append a note to `.claude/agent-feedback.md`:
-`- [YYYY-MM-DD] [agent name or "general"] | [what went wrong] | [what the correct approach was]`
+`- [YYYY-MM-DD] [agent name or "general"] | [project-specific] or [agnostic] | [what went wrong] | [what the correct approach was]`
+
+Tag as **[agnostic]** if the fix would benefit any project using the launchpad.
+Tag as **[project-specific]** if it only applies to this codebase or tech stack.
 
 **DO log** (real mistakes):
 - Wrong approach that had to be completely reversed
