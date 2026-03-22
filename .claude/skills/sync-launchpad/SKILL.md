@@ -38,7 +38,7 @@ Clone the launchpad to a temp directory:
 # Use platform-appropriate temp dir
 # Windows: use $TEMP or /tmp (Git Bash)
 # Unix: use /tmp
-git clone --depth 1 https://github.com/bajakota-cyber/claud-app-dev-launchpad.git /tmp/launchpad-sync
+git clone --depth 1 --branch main https://github.com/bajakota-cyber/claud-app-dev-launchpad.git /tmp/launchpad-sync
 ```
 
 ### Step 4: Compare files
@@ -60,17 +60,41 @@ For each file in the upstream `.claude/` folder, compare with the local version:
 
 For each syncable file, run:
 ```bash
-diff /tmp/launchpad-sync/.claude/agents/architect.md .claude/agents/architect.md
+diff --strip-trailing-cr /tmp/launchpad-sync/.claude/agents/architect.md .claude/agents/architect.md
 ```
 
 Build a list of: new files, modified files, unchanged files.
 
 ### Step 5: Apply changes (skip if --dry-run)
 
-- Copy new files into place
-- Overwrite modified launchpad-template files with upstream versions
-- For `settings.json`: read both files, merge the `allow` arrays (union of both), keep the `deny` array from upstream plus any local additions, merge `hooks` keeping both
+**CRITICAL: Never blindly overwrite. Always merge.**
+
+#### For new files (exist upstream, not locally):
+- Copy them in as-is. No conflict possible.
+
+#### For modified files (exist in both, content differs):
+Do NOT `cp` the upstream file over the local one. Instead, apply a content-aware merge:
+
+1. Read the upstream version and the local version
+2. Identify what the upstream version **added or changed** vs the previous version (treat upstream as the "new" and local as the "current base")
+3. Apply upstream additions and edits to the local file
+4. **Never remove content that exists locally but not upstream** — local additions are project-specific and must be preserved
+5. If the same section was changed in both places (true conflict), keep the local version and flag it for the user
+
+In practice, for markdown files this means:
+- Lines/sections in upstream but not local → ADD them to local
+- Lines/sections in local but not upstream → KEEP them (never delete)
+- Same line changed differently → KEEP local, flag as conflict
+
+#### For `settings.json`:
+- Merge the `allow` arrays (union of both — never remove local entries)
+- Keep local `deny` entries plus any new upstream ones
+- Merge `hooks` keeping both upstream and local hooks
+- Result must be valid JSON — verify before writing
+
+#### For all files:
 - Preserve all project-specific files (anything not in upstream)
+- Never delete a local file just because it's not in upstream
 
 ### Step 6: Report
 

@@ -66,36 +66,52 @@ Verify the launchpad is in good shape.
 
 After making improvements to agent/rule/skill files, push them to the launchpad repo so all projects benefit.
 
+**CRITICAL: You are working in a PROJECT repo, not the launchpad repo. Never run git commands against the current project's git history for launchpad changes. Always clone the launchpad to a temp directory, make changes there, and push from there.**
+
 1. Run /checkpoint to save current project state before making changes.
 
-2. Pull latest first:
+2. Clone the launchpad to a temp directory:
    ```
-   git pull origin main --rebase
+   git clone --depth 1 --branch main https://github.com/bajakota-cyber/claud-app-dev-launchpad.git /tmp/launchpad-coach
+   cd /tmp/launchpad-coach
    ```
 
-3. Stage ONLY the files you changed:
+3. **Merge your changes — do NOT blindly overwrite**:
+   - Read the upstream file and the improved local file
+   - Apply your additions and edits to the upstream file
+   - Never remove content from the upstream file that isn't in your local version — other projects may depend on it
+   - Only push the specific lines/sections you changed
+
+4. Stage ONLY the files you changed:
    ```
    git add .claude/agents/[changed-file].md
    ```
 
-4. Commit with a clear message:
+5. Commit with a clear message:
    ```
+   git config user.email "bajakota@users.noreply.github.com"
+   git config user.name "Dakota"
    git commit -m "coach: [what was improved and why]"
    ```
 
-5. Push:
+6. Push:
    ```
    git push origin main
    ```
 
-6. If push fails (another Coach beat you):
+7. If push fails (conflict with another push):
    - Run: `git pull origin main --rebase`
    - If rebase succeeds (no conflicts): push again
    - If rebase fails with CONFLICT on a file:
      - Run: `git rebase --abort`
      - Skip that file's changes entirely
-     - Tell the user: "Conflict on [file] -- another Coach changed the same file. Review manually."
+     - Tell the user: "Conflict on [file] — another change was pushed at the same time. Review manually."
    - NEVER force push. NEVER use --force.
+
+8. Cleanup:
+   ```
+   cd / && rm -rf /tmp/launchpad-coach
+   ```
 
 ## Output Format
 
