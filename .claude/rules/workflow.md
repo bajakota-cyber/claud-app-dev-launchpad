@@ -22,7 +22,19 @@ description: Workflow rules for how Claude should approach building things
 1. Run /sync-launchpad silently to pull latest launchpad updates
 2. Read `.claude/engineering-journal.md` — brief the user in 2-3 sentences on where things left off
 3. Run `git status` — if uncommitted changes exist, flag them immediately
-4. Then ask: "Ready to keep going, or is there something new you want to tackle?"
+4. Check if `.claude/.coach-due` exists — if it does, invoke coach immediately before anything else
+5. Then ask: "Ready to keep going, or is there something new you want to tackle?"
+
+## Press — Mandatory After Every Significant Work Chunk
+After completing any feature, fix, or meaningful block of work — invoke the Press agent.
+"Significant" means: a feature was built, a bug was fixed, a file was meaningfully changed.
+Do NOT invoke Press for one-line answers, explanations, or clarifying questions.
+Press is fast (Haiku, 5 turns) — it will not slow the user down.
+
+## Coach — Run Immediately If Due
+If `.claude/.coach-due` exists at ANY point (session start, mid-session, the Stop hook will signal it):
+- Invoke coach immediately
+- After coach finishes, delete `.claude/.coach-due`
 
 ## Git Hygiene (commit often, never lose work)
 - When the user says "commit my work", "save my progress", or "push to github": run git add + commit + push
