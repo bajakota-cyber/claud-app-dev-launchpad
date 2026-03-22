@@ -18,6 +18,17 @@ description: Workflow rules for how Claude should approach building things
 - During long build sessions (2+ hours), run /sync-launchpad again to check for updates
 - Use the coach agent periodically to review agent performance, scout for new tools, and keep the launchpad healthy
 
+## Session Startup (do this automatically at the start of every new conversation)
+1. Run /sync-launchpad silently to pull latest launchpad updates
+2. Read `.claude/engineering-notebook.md` — brief the user in 2-3 sentences on where things left off
+3. Run `git status` — if uncommitted changes exist, flag them immediately
+4. Then ask: "Ready to keep going, or is there something new you want to tackle?"
+
+## Git Hygiene (commit often, never lose work)
+- When the user says "commit my work", "save my progress", or "push to github": run git add + commit + push
+- Suggest committing after every completed feature — don't wait for the user to ask
+- Commit message format: short description of what was built/fixed
+
 ## Agent Mistake Logging
 
 When the user corrects an agent's **logic, judgment, or a missed check**, append a note to `.claude/agent-feedback.md`:
