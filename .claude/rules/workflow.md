@@ -20,7 +20,7 @@ description: Workflow rules for how Claude should approach building things
 
 ## Session Startup (do this automatically at the start of every new conversation)
 1. Run /sync-launchpad silently to pull latest launchpad updates
-2. Read `.claude/engineering-notebook.md` — brief the user in 2-3 sentences on where things left off
+2. Read `.claude/engineering-journal.md` — brief the user in 2-3 sentences on where things left off
 3. Run `git status` — if uncommitted changes exist, flag them immediately
 4. Then ask: "Ready to keep going, or is there something new you want to tackle?"
 
@@ -31,26 +31,34 @@ description: Workflow rules for how Claude should approach building things
 
 ## Agent Mistake Logging
 
-When the user corrects an agent's **logic, judgment, or a missed check**, append a note to `.claude/agent-feedback.md`:
-`- [YYYY-MM-DD] [agent name or "general"] | [project-specific] or [agnostic] | [what went wrong] | [what the correct approach was]`
+When the user corrects an agent's **logic, judgment, or a missed check**, log it to the right file:
 
-Tag as **[agnostic]** if the fix would benefit any project using the launchpad.
-Tag as **[project-specific]** if it only applies to this codebase or tech stack.
+- **Applies only to this project** (wrong terminology, project-specific rule violated, this tech stack only) → append to `.claude/project-shortcomings.md`
+- **Any project would hit this** (agent missed something it should always catch, workflow gap, missing skill) → append to `.claude/launchpad-shortcomings.md`
+
+Format for both files:
+```
+## [YYYY-MM-DD] — [title]
+**Issue:** What went wrong and which agent was involved
+**Impact:** What it cost (wrong code written, had to redo work, etc.)
+**Suggestion:** What should change to prevent it
+**Status:** open
+---
+```
 
 **DO log** (real mistakes):
 - Wrong approach that had to be completely reversed
 - Missed security issue, bug, or project rule violation
 - Architect planned something that got scrapped
 - Code reviewer approved something that broke
-- Agent used wrong pattern for this project (e.g. wrong terminology, wrong architecture)
+- Agent used wrong pattern for this project
 
 **DO NOT log** (cosmetic corrections):
-- Layout, position, or spacing changes ("move this field next to that one")
-- Label, naming, or wording tweaks ("rename this button")
+- Layout, position, or spacing changes
+- Label, naming, or wording tweaks
 - Font size, color, or style preferences
-- Iterative UI refinements ("make it bigger", "put it on the left")
 - User changing their mind about appearance
 
-**Escape hatches** (always override the above):
+**Escape hatches:**
 - User says **"log that"** → always log the previous correction
 - User says **"just cosmetic"** → always skip logging
