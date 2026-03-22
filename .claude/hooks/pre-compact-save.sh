@@ -48,6 +48,14 @@ SNAPSHOT_FILE="$SNAPSHOT_DIR/snapshot-$(date +%Y%m%d-%H%M%S).md"
 # Keep only last 5 snapshots to avoid bloat
 ls -t "$SNAPSHOT_DIR"/snapshot-*.md 2>/dev/null | tail -n +6 | xargs rm -f 2>/dev/null
 
+# Append session end marker to agent feedback log
+FEEDBACK_FILE="$CWD/.claude/agent-feedback.md"
+if [ -f "$FEEDBACK_FILE" ]; then
+    echo "" >> "$FEEDBACK_FILE"
+    echo "---" >> "$FEEDBACK_FILE"
+    echo "Session ended: $TIMESTAMP" >> "$FEEDBACK_FILE"
+fi
+
 # Output a message that Claude will see
 echo "Pre-compaction snapshot saved to $SNAPSHOT_FILE" >&2
 exit 0

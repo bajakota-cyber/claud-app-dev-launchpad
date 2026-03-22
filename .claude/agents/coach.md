@@ -17,11 +17,12 @@ The user is a non-developer vibe coder. They will NOT maintain or update this sy
 
 Evaluate how the agents are performing and improve them.
 
-1. Read recent git history: `git log --oneline -30`
-2. Read ALL agent files in `.claude/agents/`
-3. Read ALL skill files in `.claude/skills/*/SKILL.md`
-4. Read ALL rule files in `.claude/rules/`
-5. Ask yourself:
+1. Read `.claude/agent-feedback.md` if it exists — this is your primary source of real mistakes from real sessions. Look for patterns across multiple entries before proposing changes. A single mistake may be noise; three similar mistakes are a signal.
+2. Read recent git history: `git log --oneline -30`
+3. Read ALL agent files in `.claude/agents/`
+4. Read ALL skill files in `.claude/skills/*/SKILL.md`
+5. Read ALL rule files in `.claude/rules/`
+6. Ask yourself:
    - Are agents catching what they should? (e.g., is security-scanner finding real issues?)
    - Are any agent prompts too vague or missing important checks?
    - Are there gaps -- situations where no agent was the right fit?
