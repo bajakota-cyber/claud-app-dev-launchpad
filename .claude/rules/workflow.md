@@ -17,3 +17,26 @@ description: Workflow rules for how Claude should approach building things
 - Run /sync-launchpad at the start of any new build session to pull the latest launchpad updates
 - During long build sessions (2+ hours), run /sync-launchpad again to check for updates
 - Use the coach agent periodically to review agent performance, scout for new tools, and keep the launchpad healthy
+
+## Agent Mistake Logging
+
+When the user corrects an agent's **logic, judgment, or a missed check**, append a note to `.claude/agent-feedback.md`:
+`- [YYYY-MM-DD] [agent name or "general"] | [what went wrong] | [what the correct approach was]`
+
+**DO log** (real mistakes):
+- Wrong approach that had to be completely reversed
+- Missed security issue, bug, or project rule violation
+- Architect planned something that got scrapped
+- Code reviewer approved something that broke
+- Agent used wrong pattern for this project (e.g. wrong terminology, wrong architecture)
+
+**DO NOT log** (cosmetic corrections):
+- Layout, position, or spacing changes ("move this field next to that one")
+- Label, naming, or wording tweaks ("rename this button")
+- Font size, color, or style preferences
+- Iterative UI refinements ("make it bigger", "put it on the left")
+- User changing their mind about appearance
+
+**Escape hatches** (always override the above):
+- User says **"log that"** → always log the previous correction
+- User says **"just cosmetic"** → always skip logging
