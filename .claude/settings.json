@@ -27,8 +27,19 @@
       "Bash(git remote*)",
       "Bash(git rebase*)",
       "Bash(git checkout*)",
+      "Bash(git config*)",
+      "Bash(git fetch*)",
+      "Bash(git branch*)",
+      "Bash(rm -rf /tmp/launchpad*)",
       "Bash(rm -rf /tmp/launchpad-sync)",
-      "Bash(diff *)"
+      "Bash(diff *)",
+      "Bash(find *)",
+      "Bash(cd /tmp/launchpad* && *)",
+      "Bash(wc *)",
+      "Bash(echo *)",
+      "Bash(cp *)",
+      "Bash(sort *)",
+      "Bash(jq *)"
     ],
     "deny": [
       "Bash(rm -rf /)",
