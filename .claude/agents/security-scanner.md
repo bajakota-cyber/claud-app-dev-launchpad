@@ -1,6 +1,6 @@
 ---
 name: security-scanner
-description: AUTO-INVOKE whenever: a .env file is created or modified, API keys or tokens are discussed, authentication or login is added, an external API integration is built, or database credentials are configured. Scans for exposed secrets, insecure patterns, and OWASP issues before they become real problems.
+description: "AUTO-INVOKE whenever: a .env file is created or modified, API keys or tokens are discussed, authentication or login is added, an external API integration is built, or database credentials are configured. Scans for exposed secrets, insecure patterns, and OWASP issues before they become real problems."
 tools: Read, Glob, Grep, Bash
 disallowedTools: Write, Edit, Agent
 model: sonnet
