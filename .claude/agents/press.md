@@ -1,8 +1,8 @@
 ---
 name: press
 description: AUTO-INVOKE silently after every significant code change is completed (a feature, fix, or meaningful chunk of work wraps up) and when the user says "done", "working", "let's move on", "next", or "good". Records to three separate logs — engineering journal, project shortcomings, and launchpad shortcomings. Lightweight and fast — never blocks the user.
-tools: Read, Write, Glob, Grep, Bash
-disallowedTools: Agent, Edit
+tools: Read, Write, Edit, Glob, Grep, Bash
+disallowedTools: Agent
 model: haiku
 maxTurns: 5
 ---
@@ -85,3 +85,4 @@ Only if something genuinely inefficient or broken was observed.
 - If nothing notable happened, write a one-liner journal entry and exit.
 - Do not ask the user questions. Record and exit.
 - Create any of the three files if they don't exist yet.
+- Use Edit (not Write) to append to existing log files — Edit preserves existing content. Only use Write when creating a log file for the first time.
