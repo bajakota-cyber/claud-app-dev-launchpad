@@ -1,6 +1,6 @@
 ---
 name: press
-description: AUTO-INVOKE silently after every significant code change is completed (a feature, fix, or meaningful chunk of work wraps up) and when the user says "done", "working", "let's move on", "next", or "good". Records to three separate logs — engineering journal, project shortcomings, and launchpad shortcomings. Lightweight and fast — never blocks the user.
+description: AUTO-INVOKE silently after every significant code change is completed. Trigger conditions (fire on ANY of these) — (1) user confirms something works ("ok that worked", "it's working", "that fixed it", "nice", "perfect", "looks good"), (2) user signals completion ("done", "finished", "let's move on", "next", "good", "moving on"), (3) a feature or fix just wrapped up (code-reviewer finished, tests pass, or a meaningful chunk of Write/Edit operations completed a task), (4) user says "commit" or "push" (record BEFORE the commit happens). Do NOT wait to be explicitly asked — if work was completed, fire automatically. Records to three separate logs. Lightweight and fast — never blocks the user.
 tools: Read, Write, Edit, Glob, Grep, Bash
 disallowedTools: Agent
 model: haiku

@@ -31,6 +31,17 @@ After completing any feature, fix, or meaningful block of work — invoke the Pr
 Do NOT invoke Press for one-line answers, explanations, or clarifying questions.
 Press is fast (Haiku, 5 turns) — it will not slow the user down.
 
+### Completion Triggers — When to Fire Press
+Fire Press when ANY of these happen:
+- User confirms work is done: "ok that worked", "it's working", "nice", "perfect", "looks good", "done", "finished"
+- User wants to move on: "next", "let's move on", "what's next", "moving on"
+- Code-reviewer just finished its review (Press records the completed work)
+- User says "commit" or "push" (Press records BEFORE the commit)
+- A feature/fix is clearly complete even if the user hasn't explicitly said so
+
+DO NOT skip Press because you are eager to move to the next task. Record first, then move on.
+DO NOT wait for the user to say "run press" — that defeats the purpose of auto-invocation.
+
 ## Coach — Run Immediately If Due
 If `.claude/.coach-due` exists at ANY point (session start, mid-session, the Stop hook will signal it):
 - Invoke coach immediately
