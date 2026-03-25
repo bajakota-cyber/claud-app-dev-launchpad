@@ -2,8 +2,11 @@
   "permissions": {
     "allow": [
       "Read",
+      "Write",
+      "Edit",
       "Glob",
       "Grep",
+      "Agent",
       "Bash(npm run *)",
       "Bash(npx *)",
       "Bash(git status*)",
