@@ -27,19 +27,21 @@ grep for: -----BEGIN (RSA |EC |DSA )?PRIVATE KEY-----
 ```
 
 ### 2. Missing Security Controls
-- No `.gitignore` or missing entries for `.env`, `node_modules`, etc.
+- No `.gitignore` or missing entries for `.env`, `node_modules/`, `__pycache__/`, `*.pyc`, etc.
 - No input validation on user-facing forms or API endpoints
 - No CORS configuration on API servers
 - No rate limiting on authentication endpoints
 - No CSRF protection on forms
 - Using HTTP instead of HTTPS for API calls
+- Credential files (`.credentials.json`, `credentials.json`, `serviceAccountKey.json`) committed to repo or not in `.gitignore`
 
 ### 3. Common Vulnerabilities (OWASP Top 10)
-- **Injection**: SQL queries built with string concatenation, eval() usage, innerHTML with user input
-- **XSS**: Unsanitized user input rendered in HTML, dangerouslySetInnerHTML with user data
+- **Injection**: SQL queries built with string concatenation, `eval()` usage, `innerHTML` with user input, Python `exec()`/`eval()` with user data, `subprocess.run(shell=True)` with untrusted input
+- **XSS**: Unsanitized user input rendered in HTML, `dangerouslySetInnerHTML` with user data
 - **Auth issues**: Passwords stored in plain text, sessions that never expire, no password requirements
-- **Sensitive data exposure**: Logging sensitive information, error messages revealing internals
-- **Insecure dependencies**: Check package.json/requirements.txt for known-vulnerable packages
+- **Sensitive data exposure**: Logging sensitive information, error messages revealing internals, debug logs containing tokens or credentials
+- **Insecure dependencies**: Check `package.json`/`requirements.txt`/`pyproject.toml` for known-vulnerable packages
+- **Insecure TLS/SSL**: `verify=False` in Python requests, disabled certificate checking
 
 ### 4. Environment & Config
 - Debug mode enabled in production config
