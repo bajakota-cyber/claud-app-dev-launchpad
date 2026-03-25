@@ -26,6 +26,16 @@ This is a **template launchpad** for vibe-coding apps with Claude Code. Copy `.c
 - `/sync-launchpad --dry-run` - Preview what would change without applying
 - `/setup-launchpad` - First-time setup: pull the full launchpad into a new or existing project
 
+## Built-in MCP Tools
+The launchpad comes with these MCP servers pre-configured in `.mcp.json`:
+
+- **Context7**: Pulls live, version-specific documentation for libraries and frameworks directly into context. When you're working with any library (React, Next.js, Tailwind, etc.), Context7 can fetch the exact docs for the version you're using -- no more outdated answers or guessing at API changes. It runs automatically when Claude needs library info.
+
+To add more MCP servers to your project:
+```bash
+claude mcp add --scope project --transport http github https://api.githubcopilot.com/mcp/
+```
+
 ## Important Rules
 - ALWAYS use the architect agent before building a new feature or making big changes
 - ALWAYS run security-scanner after adding environment variables, API integrations, or auth
@@ -44,9 +54,3 @@ Update these per-project:
 - Build: `npm run build` (or whatever your project uses)
 - Dev: `npm run dev`
 - Test: `npm test`
-
-## Adding MCP Servers
-When your project needs external tools (GitHub, database, etc.), add them to `.mcp.json`:
-```bash
-claude mcp add --scope project --transport http github https://api.githubcopilot.com/mcp/
-```

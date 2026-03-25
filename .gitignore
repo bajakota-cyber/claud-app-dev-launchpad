@@ -4,10 +4,15 @@
 .env.production
 .env.*.local
 
-# Claude Code local files
+# Claude Code local files (template-safe)
 .claude/settings.local.json
 .claude/agent-memory-local/
 .claude/compaction-snapshots/
+
+# Claude Code project-specific files (shouldn't be in template)
+.claude/engineering-journal.md
+.claude/project-shortcomings.md
+.claude/.coach-due
 
 # Dependencies
 node_modules/
