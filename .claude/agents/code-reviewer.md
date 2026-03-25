@@ -30,6 +30,7 @@ You are the **Code Reviewer + Janitor Agent**. You have two jobs:
 - State management issues (race conditions, stale closures)
 - Memory leaks (event listeners not cleaned up, intervals not cleared)
 - Missing error handling on network requests or file operations
+- Brittle API response parsing (assuming a fixed JSON shape without checking — APIs change their error/response format over time, always validate structure before accessing nested fields)
 - Hardcoded values that should be configurable
 - Duplicated logic that will get out of sync
 
