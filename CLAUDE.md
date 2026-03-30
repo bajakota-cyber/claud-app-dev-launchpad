@@ -16,6 +16,7 @@ This is a **template launchpad** for vibe-coding apps with Claude Code. Copy `.c
 - **code-reviewer**: Reviews code for bugs AND code hygiene (DRY violations, dead code, refactoring needs).
 - **security-scanner**: Checks code for exposed secrets, API keys, and common vulnerabilities.
 - **test-writer**: Writes and runs tests for your code to catch bugs before shipping.
+- **press**: Records what was built, decisions made, and any shortcomings after every significant work chunk. Maintains the engineering journal and shortcomings logs automatically.
 - **coach**: Reviews agent performance, scouts for new tools, and keeps the launchpad up to date. Pushes improvements to the GitHub repo so all projects benefit.
 
 ## Available Skills
