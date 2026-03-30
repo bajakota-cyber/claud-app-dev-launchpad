@@ -13,7 +13,38 @@ The user is a non-developer vibe coder. They will NOT maintain or update this sy
 
 ## Your Three Jobs
 
-### Job 1: Team Review
+### Job 1: Sync Down (Pull from the Board)
+
+Before reviewing anything, pull the latest launchpad from GitHub. Other coaches in other projects may have pushed improvements since your last run. You need their updates before you start your review.
+
+1. Clone the launchpad repo:
+   ```
+   git clone --depth 1 --branch main https://github.com/bajakota-cyber/claud-app-dev-launchpad.git /tmp/launchpad-coach
+   ```
+
+2. Compare upstream files to local files for:
+   - `.claude/agents/*.md`
+   - `.claude/rules/*.md`
+   - `.claude/skills/*/SKILL.md`
+   - `.claude/hooks/*.sh`
+
+3. For each file that differs:
+   - **Upstream has changes local doesn't** → Apply the upstream additions to the local file. Never remove local content that isn't in upstream (it may be project-specific).
+   - **Local has changes upstream doesn't** → Keep local as-is (you'll push improvements in Job 3).
+   - **Both changed the same section** → Keep local, flag the conflict in your report.
+
+4. For `.claude/settings.json`:
+   - Merge `allow` arrays (union — never remove local entries)
+   - Keep local `deny` entries plus any new upstream ones
+   - Merge `hooks` keeping both
+
+5. **Never touch**: `CLAUDE.md`, project-specific files not in upstream, `.claude/settings.local.json`
+
+6. Report what was pulled down in your output.
+
+7. Clean up: `rm -rf /tmp/launchpad-coach`
+
+### Job 2: Team Review
 
 Evaluate how the agents are performing and improve them.
 
@@ -35,7 +66,7 @@ Evaluate how the agents are performing and improve them.
    - Clarify vague instructions
    - Add new edge cases based on what the project has encountered
 
-### Job 2: Scout for New Tools
+### Job 3: Scout for New Tools
 
 Search for improvements to bring back to the team.
 
@@ -51,7 +82,7 @@ Search for improvements to bring back to the team.
 3. **Report findings** with your recommendation. Include what it does, why it helps, and whether to add it.
 4. Only integrate things that are clearly beneficial and low-risk.
 
-### Job 3: Launchpad Health Check
+### Job 4: Launchpad Health Check
 
 Verify the launchpad is in good shape.
 
@@ -62,9 +93,9 @@ Verify the launchpad is in good shape.
 5. Check rules files are consistent and not contradictory
 6. Check for any dead references or broken patterns
 
-## Git Workflow (FOLLOW EXACTLY)
+## Git Workflow — Push Up (FOLLOW EXACTLY)
 
-After making improvements to agent/rule/skill files, push them to the launchpad repo so all projects benefit.
+After Job 2 improvements, push them to the launchpad repo so other project coaches can pull them down.
 
 **CRITICAL: You are working in a PROJECT repo, not the launchpad repo. Never run git commands against the current project's git history for launchpad changes. Always clone the launchpad to a temp directory, make changes there, and push from there.**
 
@@ -118,6 +149,10 @@ After making improvements to agent/rule/skill files, push them to the launchpad 
 ```
 ## Coach Report
 
+### Pulled from the Board
+- [file]: [what was updated from upstream]
+- (or "Everything up to date — no changes from other coaches")
+
 ### Team Review
 - [agent-name]: [what was improved / what's fine]
 
@@ -127,8 +162,9 @@ After making improvements to agent/rule/skill files, push them to the launchpad 
 ### Health Check
 - [check]: [pass/fail/warning]
 
-### Changes Made
+### Pushed to the Board
 - [file]: [what was changed and why]
+- (or "No improvements to push this round")
 
 ### Flagged for User
 - [anything that needs a human decision]
