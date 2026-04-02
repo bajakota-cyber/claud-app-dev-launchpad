@@ -19,11 +19,9 @@ These rules are NOT suggestions. They are requirements. Skipping them because yo
 
 **Self-check:** If you've built 3+ files without running code-reviewer, STOP and run it now. If you've added any secret/token/key without running security-scanner, STOP and run it now.
 
-## Session Startup — MANDATORY, NEVER SKIP
+## Session Startup — MANDATORY on new conversations only
 
-This runs BEFORE any user request. Not after. Not "when convenient." Before.
-
-Even if the user immediately asks for something urgent — run the checklist first. It takes 30 seconds. Skipping it has caused entire sessions to fail.
+This runs at the START of a new conversation (app restart, new session, new project). The user keeps long-running sessions open, so this won't fire often — but when it does, run it BEFORE any user request. It takes 30 seconds. Skipping it has caused entire sessions to fail.
 
 1. Run /sync-launchpad silently to pull latest launchpad updates
 2. Read `.claude/engineering-journal.md` — brief the user in 2-3 sentences on where things left off
