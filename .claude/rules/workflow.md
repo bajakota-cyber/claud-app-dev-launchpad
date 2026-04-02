@@ -19,15 +19,22 @@ These rules are NOT suggestions. They are requirements. Skipping them because yo
 
 **Self-check:** If you've built 3+ files without running code-reviewer, STOP and run it now. If you've added any secret/token/key without running security-scanner, STOP and run it now.
 
-## Session Startup — MANDATORY on new conversations only
+## Session Startup — Runs ONCE when a new conversation begins
 
-This runs at the START of a new conversation (app restart, new session, new project). The user keeps long-running sessions open, so this won't fire often — but when it does, run it BEFORE any user request. It takes 30 seconds. Skipping it has caused entire sessions to fail.
+This fires ONE TIME at the start of a new conversation (app restart, new session, opening a new project). It does NOT repeat mid-session. The user keeps long-running sessions, so this is rare.
+
+When it fires, run it BEFORE any user request:
 
 1. Run /sync-launchpad silently to pull latest launchpad updates
 2. Read `.claude/engineering-journal.md` — brief the user in 2-3 sentences on where things left off
 3. Run `git status` — if uncommitted changes exist, flag them immediately
 4. Check if `.claude/.coach-due` exists — if it does, invoke coach immediately before anything else
 5. Then ask: "Ready to keep going, or is there something new you want to tackle?"
+
+**Mid-session coverage** (these are handled by separate rules, NOT by re-running the startup checklist):
+- Launchpad sync: covered by the "2+ hours" rule below
+- Coach-due: covered by the coach-due rule — check whenever the file appears
+- Agent enforcement: covered by the trigger table above
 
 ## General Rules
 - Save important architectural decisions to memory immediately - don't wait
