@@ -36,6 +36,23 @@ When it fires, run it BEFORE any user request:
 - Coach-due: covered by the coach-due rule — check whenever the file appears
 - Agent enforcement: covered by the trigger table above
 
+## Subagent Failures — NEVER silently skip
+
+When you invoke a subagent (Press, Coach, code-reviewer, security-scanner, etc.), you are responsible for verifying it actually did its job. Subagents can fail silently — they return without error but don't actually write files or produce useful output.
+
+**After every subagent returns:**
+1. Check: Did it produce the expected output? (e.g., Press should have written to engineering-journal.md, code-reviewer should have reported findings)
+2. If it failed or produced nothing useful: **do the task yourself directly.** Don't move on. Don't log "agent failed" and skip it.
+3. If you can't figure out why it failed: **tell the user.** Say what agent failed, what it was supposed to do, and that you're doing it manually.
+
+**NEVER:**
+- Assume "permissions" are the problem without checking settings.json
+- Blame the subagent and move on without completing the task
+- Silently skip a failed agent's job
+- Say "the agent ran" when it produced no results
+
+**The rule is simple: the task matters, not who does it. If the subagent can't do it, you do it.**
+
 ## General Rules
 - Save important architectural decisions to memory immediately - don't wait
 - When the user describes what they want, confirm understanding before building
