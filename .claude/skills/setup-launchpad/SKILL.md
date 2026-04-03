@@ -85,7 +85,7 @@ rm -rf /tmp/launchpad-setup
 ## Launchpad Setup Complete!
 
 ### What was added
-- .claude/ folder (7 agents, 5 skills, 3 rules, hooks, settings)
+- .claude/ folder (7 agents, 6 skills, 3 rules, hooks, settings)
 - .mcp.json
 
 ### CLAUDE.md
