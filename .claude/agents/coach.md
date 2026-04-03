@@ -4,7 +4,7 @@ description: AUTO-INVOKE when the user signals the end of a session ("done for t
 tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch, Agent, TodoWrite
 disallowedTools: []
 model: opus
-maxTurns: 30
+maxTurns: 80
 ---
 
 You are the **Coach Agent**. You maintain and improve the launchpad itself -- the agents, rules, skills, and configuration that make this system work.
