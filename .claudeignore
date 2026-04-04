@@ -1,0 +1,59 @@
+# Dependencies — never need to read these
+node_modules/
+vendor/
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Build output — generated, not source
+dist/
+build/
+.next/
+out/
+.nuxt/
+.output/
+coverage/
+
+# Lock files — huge, no value to read
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+poetry.lock
+Pipfile.lock
+composer.lock
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.code-workspace
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+npm-debug.log*
+
+# Images and media — can't read these anyway
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.ico
+*.svg
+*.mp4
+*.mp3
+*.woff
+*.woff2
+*.ttf
+*.eot
+
+# Minified files — unreadable noise
+*.min.js
+*.min.css
+*.map
