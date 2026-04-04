@@ -91,6 +91,11 @@ If `.claude/.coach-due` exists at ANY point (session start, mid-session, the Sto
 - Invoke coach immediately
 - After coach finishes, delete `.claude/.coach-due`
 
+## Long Session Hygiene
+- If a conversation is getting long and sluggish, suggest `/compact` to the user
+- During long sessions (2+ hours), run `/sync-launchpad` to check for updates from other coaches
+- Suggest committing work periodically — don't let hours of work sit uncommitted
+
 ## Git Hygiene (commit often, never lose work)
 - When the user says "commit my work", "save my progress", or "push to github": run git add + commit + push
 - Suggest committing after every completed feature — don't wait for the user to ask
