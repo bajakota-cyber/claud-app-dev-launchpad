@@ -101,13 +101,13 @@ If `.claude/.coach-due` exists at ANY point (session start, mid-session, the Sto
 - Invoke coach immediately
 - After coach finishes, delete `.claude/.coach-due`
 
-## Windows Process Management
+## Windows Process Management (this project runs on Windows)
 
-When running on Windows and you need to kill processes from Claude's bash shell:
+When you need to kill node processes on Windows from Claude's bash shell:
 - **DO use:** `powershell.exe -Command "Get-Process node* | Stop-Process -Force"`
 - **DO NOT use:** `kill`, `taskkill`, or `cmd.exe /c taskkill` — these fail or behave inconsistently from Claude's bash shell on Windows.
 - **For port-specific kills:** `powershell.exe -Command "Get-NetTCPConnection -LocalPort PORT -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force }"`
-- **Prevent duplicate bot/server instances:** Use a TCP port lock so only one instance can run. This is more reliable than lockfiles on Windows.
+- **Prevent duplicate bot instances:** Use a TCP port lock (e.g., port 4599) so only one instance can run. This is more reliable than lockfiles on Windows.
 
 ## Long Session Hygiene
 - If a conversation is getting long and sluggish, suggest `/compact` to the user
