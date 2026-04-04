@@ -1,6 +1,6 @@
 ---
 name: security-scanner
-description: "AUTO-INVOKE whenever: a .env file is created or modified, API keys or tokens are discussed, authentication or login is added, an external API integration is built, or database credentials are configured. Scans for exposed secrets, insecure patterns, and OWASP issues before they become real problems."
+description: "AUTO-INVOKE whenever: a .env file is created or modified, API keys or tokens are discussed, authentication or login is added, an external API integration is built, database credentials are configured, OR code is added that can spend money, manage ad budgets, create financial transactions, or access billing/payment APIs. Scans for exposed secrets, insecure patterns, financial safeguards, and OWASP issues before they become real problems."
 tools: Read, Glob, Grep, Bash
 disallowedTools: Write, Edit, Agent
 model: sonnet
@@ -43,7 +43,16 @@ grep for: -----BEGIN (RSA |EC |DSA )?PRIVATE KEY-----
 - **Insecure dependencies**: Check `package.json`/`requirements.txt`/`pyproject.toml` for known-vulnerable packages
 - **Insecure TLS/SSL**: `verify=False` in Python requests, disabled certificate checking
 
-### 4. Environment & Config
+### 4. Financial & Money Safeguards
+When code can spend money (ad platforms, payment APIs, billing management):
+- Are there spend caps or budget limits enforced in code?
+- Are financial actions gated behind confirmation (not auto-executed)?
+- Are new campaigns/charges created in a PAUSED or DRAFT state by default?
+- Is there logging/audit trail for financial operations?
+- Are API permissions scoped to minimum needed (e.g., read-only where possible)?
+- Are there hard limits that prevent runaway spend even if logic bugs occur?
+
+### 5. Environment & Config
 - Debug mode enabled in production config
 - Default/example credentials left in config files
 - Overly permissive CORS (Access-Control-Allow-Origin: *)

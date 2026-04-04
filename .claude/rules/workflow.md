@@ -13,11 +13,18 @@ These rules are NOT suggestions. They are requirements. Skipping them because yo
 | New feature or significant change | **architect** | BEFORE writing any code. Not after. Not during. Before. |
 | Feature implemented | **code-reviewer** | IMMEDIATELY after. Every feature. Every time. No skipping. |
 | API keys, auth, tokens, secrets, webhooks added | **security-scanner** | After EACH addition, not once at the end. |
+| Code that spends money, manages ads/billing, or creates financial transactions | **security-scanner** | IMMEDIATELY. Money code = security-critical code. |
 | 2 failed fix attempts on the same issue | **bird-eye** | Stop. Do not attempt fix #3. Invoke bird-eye. |
 | Feature/fix completed | **press** | Record BEFORE moving to next task. |
 | Session end or `.claude/.coach-due` exists | **coach** | Invoke immediately. |
 
-**Self-check:** If you've built 3+ files without running code-reviewer, STOP and run it now. If you've added any secret/token/key without running security-scanner, STOP and run it now.
+**Self-check (MANDATORY — run this mental checklist after EVERY Write/Edit cycle):**
+1. Have I created or modified 3+ files since the last code-reviewer run? **STOP and run code-reviewer NOW.** This includes batch building sessions where multiple services/handlers are created in rapid succession — do not wait until "the feature is done." Review in batches.
+2. Have I added any secret, token, key, or API credential? **STOP and run security-scanner NOW.**
+3. Have I added any code that can spend money, create financial transactions, modify billing, manage ad budgets, or access payment APIs? **STOP and run security-scanner NOW.** Money code is as sensitive as credential code.
+4. Have I completed a feature or fix without invoking Press? **STOP and run Press NOW.**
+
+**If you catch yourself about to skip any of these because "it's a small change" or "I'll do it after the next one" — that is exactly when bugs and security gaps ship. Do it now.**
 
 ## Session Startup — Runs ONCE when a new conversation begins
 
@@ -86,10 +93,21 @@ DO NOT wait for the user to say "run press" — that defeats the purpose of auto
 
 **Fallback:** If Press subagent fails to write files for any reason, YOU write the journal entry directly. No excuses. The log must be updated.
 
+**Press Self-Check (same weight as code-reviewer self-check):**
+If you have completed 2+ features/fixes without invoking Press, STOP what you are doing and invoke Press NOW. Do not batch Press at the end of a session — shortcomings lose context when recorded hours after they happen. Press should fire after EACH significant chunk, not once at session end.
+
 ## Coach — Run Immediately If Due
 If `.claude/.coach-due` exists at ANY point (session start, mid-session, the Stop hook will signal it):
 - Invoke coach immediately
 - After coach finishes, delete `.claude/.coach-due`
+
+## Windows Process Management
+
+When running on Windows and you need to kill processes from Claude's bash shell:
+- **DO use:** `powershell.exe -Command "Get-Process node* | Stop-Process -Force"`
+- **DO NOT use:** `kill`, `taskkill`, or `cmd.exe /c taskkill` — these fail or behave inconsistently from Claude's bash shell on Windows.
+- **For port-specific kills:** `powershell.exe -Command "Get-NetTCPConnection -LocalPort PORT -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force }"`
+- **Prevent duplicate bot/server instances:** Use a TCP port lock so only one instance can run. This is more reliable than lockfiles on Windows.
 
 ## Long Session Hygiene
 - If a conversation is getting long and sluggish, suggest `/compact` to the user
