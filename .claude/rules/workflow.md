@@ -10,7 +10,7 @@ These rules are NOT suggestions. They are requirements. Skipping them because yo
 
 | Trigger | Agent | When |
 |---------|-------|------|
-| New feature or significant change | **architect** | BEFORE writing any code. Not after. Not during. Before. |
+| New feature or significant change | **architect** | BEFORE writing any code -- UNLESS the user has already provided detailed specs or step-by-step instructions (they did the planning). When in doubt, ask "Should I plan this first or just start building?" |
 | Feature implemented | **code-reviewer** | IMMEDIATELY after. Every feature. Every time. No skipping. |
 | API keys, auth, tokens, secrets, webhooks added | **security-scanner** | After EACH addition, not once at the end. |
 | Code that spends money, manages ads/billing, or creates financial transactions | **security-scanner** | IMMEDIATELY. Money code = security-critical code. |
