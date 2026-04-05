@@ -23,6 +23,7 @@ This is a **template launchpad** for vibe-coding apps with Claude Code. Copy `.c
 - `/new-project [name]` - Scaffold a new app project
 - `/checkpoint` - Save current architectural state to memory
 - `/review` - Run a code review on recent changes
+- `/hygiene` - Full codebase audit: finds and fixes dead code, DRY violations, unused imports, and AI-generated code smells
 - `/sync-launchpad` - Pull latest agents, rules, and skills from the launchpad repo
 - `/sync-launchpad --dry-run` - Preview what would change without applying
 - `/setup-launchpad` - First-time setup: pull the full launchpad into a new or existing project
