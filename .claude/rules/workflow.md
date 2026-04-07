@@ -118,6 +118,7 @@ When you need to kill node processes on Windows from Claude's bash shell:
 - When the user says "commit my work", "save my progress", or "push to github": run git add + commit + push
 - Suggest committing after every completed feature — don't wait for the user to ask
 - Commit message format: short description of what was built/fixed
+- **BEFORE every push to the launchpad repo:** ALWAYS run `git pull origin main --rebase` first and READ the incoming changes. Other project coaches push updates frequently — blindly pushing without pulling first risks overwriting their work. Never assume your local copy is up to date.
 
 ## Agent Mistake Logging
 
