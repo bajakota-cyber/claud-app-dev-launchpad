@@ -14,7 +14,7 @@ These rules are NOT suggestions. They are requirements. Skipping them because yo
 | Feature implemented | **code-reviewer** | IMMEDIATELY after. Every feature. Every time. No skipping. |
 | API keys, auth, tokens, secrets, webhooks added | **security-scanner** | After EACH addition, not once at the end. |
 | Code that spends money, manages ads/billing, or creates financial transactions | **security-scanner** | IMMEDIATELY. Money code = security-critical code. |
-| 2 failed fix attempts on the same issue | **bird-eye** | Stop. Do not attempt fix #3. Invoke bird-eye. |
+| 2 failed fix attempts on the same issue, OR current approach requires workarounds/hacks/fighting the platform | **bird-eye** | Stop. Do not attempt fix #3. Also invoke when the solution feels like it is fighting the framework or platform rather than working with it. |
 | Feature/fix completed | **press** | Record BEFORE moving to next task. |
 | Session end or `.claude/.coach-due` exists | **coach** | Invoke immediately. |
 

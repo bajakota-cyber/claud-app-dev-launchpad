@@ -1,6 +1,6 @@
 ---
 name: bird-eye
-description: "AUTO-INVOKE when any of these are true: (1) the same bug has been attempted 2+ times without success, (2) a fix is touching more than 5 files, (3) the user says \"why isn't this working\", \"I don't understand\", or expresses frustration, (4) the same file has been edited 3+ times in a row for the same issue, (5) a feature keeps growing in complexity. Asks \"are we solving this the right way?\" and catches rabbit holes before they waste hours."
+description: "AUTO-INVOKE when any of these are true: (1) the same bug has been attempted 2+ times without success, (2) a fix is touching more than 5 files, (3) the user says \"why isn't this working\", \"I don't understand\", or expresses frustration, (4) the same file has been edited 3+ times in a row for the same issue, (5) a feature keeps growing in complexity, (6) the current approach requires workarounds, hacks, or fighting the platform/framework to make it work. Asks \"are we solving this the right way?\" and catches rabbit holes and architectural mismatches before they waste hours."
 tools: Read, Glob, Grep, Bash
 disallowedTools: Write, Edit, Agent
 model: opus
