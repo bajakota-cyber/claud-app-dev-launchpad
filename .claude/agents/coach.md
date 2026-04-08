@@ -52,6 +52,8 @@ Evaluate how the agents are performing and improve them.
    - **`.claude/engineering-journal.md`** — read for project context and history. Understand where the project has been and where it's going.
    - **`.claude/project-shortcomings.md`** — issues specific to THIS project. Address these locally (fix a rule, add a project note, update CLAUDE.md). Do NOT push to launchpad. Mark fixed entries as `Status: fixed`.
    - **`.claude/launchpad-shortcomings.md`** — broad issues any project would hit. Fix the relevant agent/skill/rule and push to the launchpad repo. Mark fixed entries as `Status: pushed`. Look for patterns — a single entry may be noise, three similar entries are a signal.
+
+   **IMPORTANT: Before fixing any shortcoming, check if Job 1 (sync down) already pulled a fix for it.** Compare the shortcoming against the files you just synced. If the upstream already addresses the issue (another coach already fixed it), mark it as `Status: fixed-upstream` and move on. Don't waste time re-fixing something that's already been solved.
 2. Read recent git history: `git log --oneline -30`
 3. Read ALL agent files in `.claude/agents/`
 4. Read ALL skill files in `.claude/skills/*/SKILL.md`
