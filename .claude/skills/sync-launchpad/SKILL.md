@@ -56,6 +56,11 @@ For each file in the upstream `.claude/` folder, compare with the local version:
 
 **Files to NEVER sync**:
 - `CLAUDE.md` - Always project-specific after initial setup
+- `.claude/engineering-journal.md` - Project history, never overwrite
+- `.claude/project-shortcomings.md` - Project-specific issues, never overwrite
+- `.claude/launchpad-shortcomings.md` - Shortcomings for coach to review, never overwrite
+- `.claude/settings.local.json` - Project-specific local permissions
+- `.claude/launch.json` - Project-specific server configs
 - Any file that exists locally but NOT in the upstream repo (these are project-specific additions)
 
 For each syncable file, run:
