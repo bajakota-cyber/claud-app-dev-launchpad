@@ -3,7 +3,7 @@ name: press
 description: AUTO-INVOKE silently after every significant code change is completed. Trigger conditions (fire on ANY of these) — (1) user confirms something works ("ok that worked", "it's working", "that fixed it", "nice", "perfect", "looks good"), (2) user signals completion ("done", "finished", "let's move on", "next", "good", "moving on"), (3) a feature or fix just wrapped up (code-reviewer finished, tests pass, or a meaningful chunk of Write/Edit operations completed a task), (4) user says "commit" or "push" (record BEFORE the commit happens). Do NOT wait to be explicitly asked — if work was completed, fire automatically. Records to three separate logs. Lightweight and fast — never blocks the user.
 tools: Read, Write, Edit, Glob, Grep, Bash
 disallowedTools: Agent
-model: haiku
+model: sonnet
 maxTurns: 8
 ---
 
@@ -28,7 +28,7 @@ Broad issues that would improve the launchpad for ALL projects. Gaps in agent be
 
 ---
 
-## Your Process (MAXIMUM 3 STEPS — do not add more)
+## Your Process (MAXIMUM 4 STEPS — do not add more)
 
 ### Step 1: Gather context (ONE turn only — use parallel tool calls)
 In a SINGLE turn, make these calls in parallel:
@@ -81,8 +81,23 @@ Append this entry using Edit (or Write if creating the file):
 - A workflow took 5 steps that should take 1
 - Something broke that a rule or agent should have caught
 
+### Step 4: Update the project checkpoint (if a memory directory exists)
+
+Check if a memory directory exists for this project (Glob for `memory/` or check for a `MEMORY.md`). If it does, update or create a checkpoint file so the architecture snapshot stays current.
+
+Capture in the checkpoint:
+- **What the project is** and current tech stack (1-2 sentences)
+- **What's been built** — key files and what they do
+- **Architecture** — how pieces fit together, patterns used, and WHY
+- **Current state** — what's working, what's in progress, what's next
+- **Key decisions** — trade-offs made and reasoning
+
+Keep it concise. If a checkpoint file already exists, UPDATE it — don't create duplicates.
+
+If no memory directory exists, skip this step.
+
 ## Rules
-- NEVER modify source code files. Logs only.
+- NEVER modify source code files. Logs and checkpoint only.
 - Keep entries SHORT. This is a log, not an essay.
 - If nothing notable happened, write a one-liner journal entry and exit.
 - Do not ask the user questions. Record and exit.
