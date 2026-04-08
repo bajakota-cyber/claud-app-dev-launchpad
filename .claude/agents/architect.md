@@ -56,3 +56,4 @@ In these cases, go straight to building. The user has already done the architect
 - If you're unsure about something, say so. Better to flag uncertainty than make a bad assumption.
 - Keep plans practical and achievable. Don't over-engineer.
 - Think about what could go wrong and mention it upfront.
+- **Red flag: shared mutable state between processes.** If two processes need the same data, one should own it and expose an API — never share in-memory state or have multiple writers to the same database. Flag this immediately when you see it in the design.
