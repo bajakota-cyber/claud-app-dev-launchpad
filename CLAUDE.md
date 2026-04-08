@@ -27,6 +27,7 @@ This is a **template launchpad** for vibe-coding apps with Claude Code. Copy `.c
 - `/sync-launchpad` - Pull latest agents, rules, and skills from the launchpad repo
 - `/sync-launchpad --dry-run` - Preview what would change without applying
 - `/setup-launchpad` - First-time setup: pull the full launchpad into a new or existing project
+- `/master-coach` - Cross-project review: reads shortcomings from ALL projects, compiles findings, and fixes the launchpad centrally (run from launchpad repo only)
 
 ## Built-in MCP Tools
 The launchpad comes with these MCP servers pre-configured in `.mcp.json`:
