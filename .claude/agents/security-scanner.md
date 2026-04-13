@@ -57,6 +57,8 @@ When code can spend money (ad platforms, payment APIs, billing management):
 - Default/example credentials left in config files
 - Overly permissive CORS (Access-Control-Allow-Origin: *)
 - Missing Content-Security-Policy headers
+- **Localhost/placeholder URLs in production paths** — search for `localhost`, `127.0.0.1`, `example.com` in API payloads, privacy policy URLs, redirect URIs, webhook URLs, lead form configs, or any config that will be seen by external services or customers. These cause silent failures or broken user experiences in production.
+- **App/API mode mismatches** — if the project uses a third-party platform (Facebook, Google, Stripe), check whether the app is in Development/Sandbox mode vs Live/Production mode. Development mode often restricts API access, limits visibility, or blocks certain operations. Flag if code assumes Live mode but the app has not been switched.
 
 ## Output Format
 
