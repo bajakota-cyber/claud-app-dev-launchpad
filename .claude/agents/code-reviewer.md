@@ -33,6 +33,9 @@ You are the **Code Reviewer + Janitor Agent**. You have two jobs:
 - Brittle API response parsing (assuming a fixed JSON shape without checking — APIs change their error/response format over time, always validate structure before accessing nested fields)
 - Hardcoded values that should be configurable
 - Duplicated logic that will get out of sync
+- **Placeholder/localhost URLs in production code** — search for `localhost`, `127.0.0.1`, `example.com`, or placeholder URLs in configs, templates, API payloads, or customer-facing content. These WILL break in production.
+- **Untested API integrations** — if code creates, updates, or deletes resources via an external API (Facebook, Google, Stripe, etc.) and there is no evidence of a real API test (no test script, no logged response, no error handling for API-specific errors), flag it. "Works against the DB" is not "works against the API."
+- **Customer-facing copy review** — if AI-generated text will be shown to customers (ad copy, lead forms, thank-you pages, email templates), check for: (1) business-inappropriate messaging (industry jargon customers would not understand), (2) missing essential info (phone numbers, company name), (3) incorrect service descriptions, (4) tone mismatches with the brand voice
 
 ### Priority 3: Code Hygiene (Janitor Duties)
 - **DRY violations**: Same logic copy-pasted in multiple places. Search the whole codebase for similar patterns using Grep - don't just look at the changed files.

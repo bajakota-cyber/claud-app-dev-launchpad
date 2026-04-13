@@ -15,6 +15,7 @@ These rules are NOT suggestions. They are requirements. Skipping them because yo
 | API keys, auth, tokens, secrets, webhooks added | **security-scanner** | After EACH addition, not once at the end. |
 | Code that spends money, manages ads/billing, or creates financial transactions | **security-scanner** | IMMEDIATELY. Money code = security-critical code. |
 | 2 failed fix attempts on the same issue, OR current approach requires workarounds/hacks/fighting the platform | **bird-eye** | Stop. Do not attempt fix #3. Also invoke when the solution feels like it is fighting the framework or platform rather than working with it. |
+| External API integration built (Facebook, Google, Stripe, any third-party) | **code-reviewer** | BEFORE considering the feature done. Reviewer must verify: real API call was tested, no localhost URLs in production paths, app is in correct mode (Live vs Development). |
 | Feature/fix completed | **press** | Record BEFORE moving to next task. |
 | Session end or `.claude/.coach-due` exists | **coach** | Invoke immediately. |
 
@@ -23,6 +24,8 @@ These rules are NOT suggestions. They are requirements. Skipping them because yo
 2. Have I added any secret, token, key, or API credential? **STOP and run security-scanner NOW.**
 3. Have I added any code that can spend money, create financial transactions, modify billing, manage ad budgets, or access payment APIs? **STOP and run security-scanner NOW.** Money code is as sensitive as credential code.
 4. Have I completed a feature or fix without invoking Press? **STOP and run Press NOW.**
+5. Have I built code that calls an external API (Facebook, Google, Stripe, etc.) without making at least ONE real API call to verify it works? **STOP and test against the real API NOW.** Do not wait until "the feature is done" to discover that required parameters are wrong, the app is in the wrong mode, or the API rejects your payload. Test early, test real. "It works against the database" is NOT "it works."
+6. Have I written customer-facing text (ad copy, lead forms, thank-you pages, emails) without flagging it for the user to review? **Flag it NOW.** AI-generated marketing copy frequently misses business context — wrong service emphasis, industry jargon customers do not understand, missing phone numbers, inappropriate messaging.
 
 **If you catch yourself about to skip any of these because "it's a small change" or "I'll do it after the next one" — that is exactly when bugs and security gaps ship. Do it now.**
 
