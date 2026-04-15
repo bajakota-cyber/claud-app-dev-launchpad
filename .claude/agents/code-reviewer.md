@@ -34,7 +34,8 @@ You are the **Code Reviewer + Janitor Agent**. You have two jobs:
 - Hardcoded values that should be configurable
 - Duplicated logic that will get out of sync
 - **Placeholder/localhost URLs in production code** — search for `localhost`, `127.0.0.1`, `example.com`, or placeholder URLs in configs, templates, API payloads, or customer-facing content. These WILL break in production.
-- **Untested API integrations** — if code creates, updates, or deletes resources via an external API (Facebook, Google, Stripe, etc.) and there is no evidence of a real API test (no test script, no logged response, no error handling for API-specific errors), flag it. "Works against the DB" is not "works against the API."
+- **Untested API integrations** — if code creates, updates, or deletes resources via an external API (Facebook, Google, Stripe, etc.) and there is no evidence of a real API test (no test script, no logged response, no error handling for API-specific errors), flag it. "Works against the DB" is not "works against the API." Check that ALL code paths were tested, not just the simplest one — multi-segment, batch, and edge-case paths often require different API parameters.
+- **Deprecated API parameters** — if code uses platform-specific targeting, behaviors, or feature flags (e.g., Facebook audience segments, Google ad extensions), check whether they are still supported. APIs deprecate options without removing them from docs. Flag any targeting/behavior parameter that was not verified against a real API call.
 - **Customer-facing copy review** — if AI-generated text will be shown to customers (ad copy, lead forms, thank-you pages, email templates), check for: (1) business-inappropriate messaging (industry jargon customers would not understand), (2) missing essential info (phone numbers, company name), (3) incorrect service descriptions, (4) tone mismatches with the brand voice
 
 ### Priority 3: Code Hygiene (Janitor Duties)

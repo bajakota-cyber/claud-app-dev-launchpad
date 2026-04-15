@@ -26,6 +26,8 @@ These rules are NOT suggestions. They are requirements. Skipping them because yo
 4. Have I completed a feature or fix without invoking Press? **STOP and run Press NOW.**
 5. Have I built code that calls an external API (Facebook, Google, Stripe, etc.) without making at least ONE real API call to verify it works? **STOP and test against the real API NOW.** Do not wait until "the feature is done" to discover that required parameters are wrong, the app is in the wrong mode, or the API rejects your payload. Test early, test real. "It works against the database" is NOT "it works."
 6. Have I written customer-facing text (ad copy, lead forms, thank-you pages, emails) without flagging it for the user to review? **Flag it NOW.** AI-generated marketing copy frequently misses business context — wrong service emphasis, industry jargon customers do not understand, missing phone numbers, inappropriate messaging.
+7. Have I tested only ONE code path of a multi-path API integration? **STOP and test the other paths NOW.** Single-segment passing does NOT mean multi-segment works. Each distinct API call pattern (single vs batch, CBO vs ABO, one-off vs recurring) needs its own real API test.
+8. Am I creating new API resources (forms, campaigns, audiences) on every test attempt instead of reusing? **STOP and cache the resource ID.** APIs rate-limit resource creation. Create once, save the ID, reuse for all subsequent tests.
 
 **If you catch yourself about to skip any of these because "it's a small change" or "I'll do it after the next one" — that is exactly when bugs and security gaps ship. Do it now.**
 
