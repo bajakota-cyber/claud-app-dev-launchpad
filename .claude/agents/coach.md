@@ -15,11 +15,25 @@ The user is a non-developer vibe coder. They will NOT maintain or update this sy
 
 ### Job 1: Sync Down (Pull from the Board)
 
-Before reviewing anything, pull the latest launchpad from GitHub. Other coaches in other projects may have pushed improvements since your last run. You need their updates before you start your review.
+Before reviewing anything, pull the latest launchpad. Other coaches in other projects may have pushed improvements since your last run. You need their updates before you start your review.
 
-1. Clone the launchpad repo:
+**First, detect the launchpad source mode:**
+
+Read `.claude/.launchpad-source` (one-line config file with URL or local path). If it doesn't exist, default to GitHub URL `https://github.com/bajakota-cyber/claud-app-dev-launchpad.git`.
+
+- Starts with `http://`, `https://`, or `git@` → **URL mode** (use git)
+- Starts with `/`, `C:`, `D:`, `~`, etc → **LOCAL mode** (use file copy — friend has an airgapped master folder)
+
+1. Fetch the launchpad to a temp directory:
+
+   **URL mode:**
    ```
-   git clone --depth 1 --branch main https://github.com/bajakota-cyber/claud-app-dev-launchpad.git /tmp/launchpad-coach
+   git clone --depth 1 --branch main <URL> /tmp/launchpad-coach
+   ```
+
+   **LOCAL mode:**
+   ```
+   cp -r "<LOCAL_PATH>" /tmp/launchpad-coach
    ```
 
 2. Compare upstream files to local files for:
@@ -95,17 +109,19 @@ Verify the launchpad is in good shape.
 5. Check rules files are consistent and not contradictory
 6. Check for any dead references or broken patterns
 
-## Git Workflow — Push Up (FOLLOW EXACTLY)
+## Push Up — Workflow varies by mode (FOLLOW EXACTLY)
 
-After Job 2 improvements, push them to the launchpad repo so other project coaches can pull them down.
+After Job 2 improvements, push them to the launchpad source so other project coaches can pull them down.
 
-**CRITICAL: You are working in a PROJECT repo, not the launchpad repo. Never run git commands against the current project's git history for launchpad changes. Always clone the launchpad to a temp directory, make changes there, and push from there.**
+**CRITICAL: You are working in a PROJECT repo, not the launchpad source. Never modify the project's own files for launchpad changes. Always work in the temp clone or copy back to the master folder.**
+
+### URL mode (GitHub)
 
 1. Run /checkpoint to save current project state before making changes.
 
 2. Clone the launchpad to a temp directory:
    ```
-   git clone --depth 1 --branch main https://github.com/bajakota-cyber/claud-app-dev-launchpad.git /tmp/launchpad-coach
+   git clone --depth 1 --branch main <URL_FROM_CONFIG> /tmp/launchpad-coach
    cd /tmp/launchpad-coach
    ```
 
@@ -141,7 +157,27 @@ After Job 2 improvements, push them to the launchpad repo so other project coach
      - Tell the user: "Conflict on [file] — another change was pushed at the same time. Review manually."
    - NEVER force push. NEVER use --force.
 
-8. Cleanup:
+### LOCAL mode (airgapped master folder)
+
+1. Run /checkpoint to save current project state before making changes.
+
+2. The temp copy already exists at `/tmp/launchpad-coach` from Job 1.
+
+3. Apply your improvements to the temp copy (same merge approach as URL mode — don't overwrite, only add/edit):
+   - Read the master file and the improved local file
+   - Apply additions and edits
+   - Never remove content from the master file
+
+4. Copy ONLY the files you changed back to the master folder:
+   ```
+   cp /tmp/launchpad-coach/.claude/agents/[changed-file].md "<LOCAL_PATH_FROM_CONFIG>/.claude/agents/"
+   ```
+
+5. No git commit/push needed — the master folder IS the source of truth.
+
+6. Tell the user what was updated in the master folder so they know what other projects will pick up on next sync.
+
+### Cleanup (both modes):
    ```
    cd / && rm -rf /tmp/launchpad-coach
    ```

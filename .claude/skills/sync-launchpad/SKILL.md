@@ -9,9 +9,11 @@ argument-hint: "[optional: --dry-run to preview changes without applying]"
 
 # Sync Launchpad
 
-Pull the latest .claude/ configuration from the launchpad repo and update this project.
+Pull the latest .claude/ configuration from the launchpad source and update this project.
 
-**Launchpad repo**: https://github.com/bajakota-cyber/claud-app-dev-launchpad
+The launchpad source can be either:
+- **GitHub URL** (default for Dakota's setup): https://github.com/bajakota-cyber/claud-app-dev-launchpad
+- **Local folder path** (airgapped/shared setup): a folder on disk like `C:\claude-launchpad\`
 
 ## Process
 
@@ -19,27 +21,47 @@ Pull the latest .claude/ configuration from the launchpad repo and update this p
 
 If the user passed `--dry-run`, only report what would change. Do NOT apply any changes.
 
-### Step 2: Determine where we are
+### Step 2: Determine the launchpad source (URL or local path)
 
-Check if this IS the launchpad repo or a downstream project:
+Check for `.claude/.launchpad-source` in the current project. This is a one-line config file containing either a GitHub URL or a local folder path.
 
+```bash
+cat .claude/.launchpad-source 2>/dev/null
+```
+
+**Detect the mode:**
+- Starts with `http://` or `https://` or `git@` → **URL mode** (use git)
+- Starts with `/`, `C:`, `D:`, `~`, or any local path → **LOCAL mode** (use file copy)
+- File doesn't exist → **URL mode** with default `https://github.com/bajakota-cyber/claud-app-dev-launchpad.git`
+
+### Step 3: Determine where we are
+
+Check if this IS the launchpad source itself or a downstream project:
+
+**URL mode:**
 ```bash
 git remote get-url origin 2>/dev/null
 ```
+- If the URL matches the launchpad source → This is the launchpad repo. Just run `git pull origin main` and you're done.
+- Otherwise → downstream project. Continue to Step 4.
 
-- If the URL contains `claud-app-dev-launchpad` → **This is the launchpad repo itself**. Just run `git pull origin main` and you're done.
-- If the URL is different or missing → **This is a downstream project**. Continue to Step 3.
+**LOCAL mode:**
+- If the current project's path matches the configured local path → This IS the master folder. Nothing to sync (it IS the source).
+- Otherwise → downstream project. Continue to Step 4.
 
-### Step 3: Fetch the latest launchpad
+### Step 4: Fetch the latest launchpad
 
-Clone the launchpad to a temp directory:
-
+**URL mode:** Clone to a temp directory.
 ```bash
-# Use platform-appropriate temp dir
-# Windows: use $TEMP or /tmp (Git Bash)
-# Unix: use /tmp
-git clone --depth 1 --branch main https://github.com/bajakota-cyber/claud-app-dev-launchpad.git /tmp/launchpad-sync
+git clone --depth 1 --branch main <URL_FROM_CONFIG> /tmp/launchpad-sync
 ```
+
+**LOCAL mode:** Copy the master folder to a temp directory (so we don't modify the master during compare/merge).
+```bash
+cp -r "<LOCAL_PATH_FROM_CONFIG>" /tmp/launchpad-sync
+```
+
+If LOCAL mode and the path doesn't exist: tell the user "Launchpad master folder not found at <path>. Update `.claude/.launchpad-source` or run `/setup-launchpad-local` to set it up."
 
 ### Step 4: Compare files
 
@@ -136,6 +158,7 @@ rm -rf /tmp/launchpad-sync
 
 ## Error Handling
 
-- If `git clone` fails (no network, repo moved): Tell the user "Can't reach the launchpad repo. Check your internet connection or verify the repo URL."
+- **URL mode**: If `git clone` fails (no network, repo moved), tell the user "Can't reach the launchpad repo. Check your internet connection or verify the URL in `.claude/.launchpad-source`."
+- **LOCAL mode**: If the master folder doesn't exist, tell the user "Launchpad master folder not found at <path>. Run `/setup-launchpad-local` or update `.claude/.launchpad-source`."
 - If a file copy fails: Skip that file, report it, continue with the rest
 - If settings.json merge produces invalid JSON: Keep the local version, flag it for the user

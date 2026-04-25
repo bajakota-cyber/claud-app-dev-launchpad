@@ -66,11 +66,19 @@ Build a table:
 
 ## Step 4: Fix the Launchpad
 
+**First, detect the launchpad source mode:**
+
+Check `.claude/.launchpad-source` in the launchpad repo (this project). If missing, default to GitHub URL.
+- URL → use git clone/push
+- Local path → use file copy
+
 For each actionable shortcoming (strong signal, not already fixed):
+
+### URL mode (GitHub)
 
 1. Clone the launchpad repo fresh:
    ```bash
-   git clone --depth 1 --branch main https://github.com/bajakota-cyber/claud-app-dev-launchpad.git /tmp/launchpad-master-coach
+   git clone --depth 1 --branch main <URL> /tmp/launchpad-master-coach
    ```
 
 2. Read the upstream file you need to modify
@@ -107,6 +115,27 @@ For each actionable shortcoming (strong signal, not already fixed):
 9. Clean up:
    ```bash
    cd / && rm -rf /tmp/launchpad-master-coach
+   ```
+
+### LOCAL mode (airgapped master folder)
+
+1. Copy the master folder to a temp directory:
+   ```bash
+   cp -r "<LOCAL_PATH>" /tmp/launchpad-master-coach
+   ```
+
+2. Read the master file you need to modify
+3. Make **small, targeted edits** — never rewrite entire files
+4. Copy ONLY the changed files back to the master folder:
+   ```bash
+   cp /tmp/launchpad-master-coach/.claude/agents/[changed-file].md "<LOCAL_PATH>/.claude/agents/"
+   ```
+
+5. No git operations — the master folder IS the source of truth.
+
+6. Clean up:
+   ```bash
+   rm -rf /tmp/launchpad-master-coach
    ```
 
 ## Step 5: Report
