@@ -9,9 +9,11 @@ argument-hint: "[optional: --force to overwrite existing .claude/ folder]"
 
 # Setup Launchpad
 
-Pull the full vibe coding launchpad into the current project from GitHub.
+Pull the full vibe coding launchpad into the current project. Source can be GitHub URL or a local folder.
 
-**Launchpad repo**: https://github.com/bajakota-cyber/claud-app-dev-launchpad
+**Default source (GitHub)**: https://github.com/bajakota-cyber/claud-app-dev-launchpad
+
+For airgapped / shared / local-only setup, see `/setup-launchpad-local`.
 
 ## Process
 
@@ -28,15 +30,29 @@ ls -la .mcp.json 2>/dev/null
 - If `.claude/` already exists and `--force` was NOT passed, warn the user: "This project already has a .claude/ folder. Run `/setup-launchpad --force` to overwrite, or use `/sync-launchpad` to update."
 - If `--force` was passed, continue and overwrite.
 
-### Step 2: Clone the launchpad
+### Step 2: Determine the launchpad source
 
+Check `$ARGUMENTS` for a path or URL. If none given:
+- Default to GitHub URL: `https://github.com/bajakota-cyber/claud-app-dev-launchpad.git`
+
+If `$ARGUMENTS` looks like a local path (starts with `/`, `C:`, `D:`, `~`), use LOCAL mode.
+If it looks like a URL, use URL mode.
+
+### Step 3: Fetch the launchpad
+
+**URL mode:**
 ```bash
-git clone --depth 1 https://github.com/bajakota-cyber/claud-app-dev-launchpad.git /tmp/launchpad-setup
+git clone --depth 1 <URL> /tmp/launchpad-setup
 ```
 
-If clone fails, tell the user to check their internet connection.
+**LOCAL mode:**
+```bash
+cp -r "<LOCAL_PATH>" /tmp/launchpad-setup
+```
 
-### Step 3: Copy .claude/ and .mcp.json
+If fetch fails, tell the user to check the source location.
+
+### Step 4: Copy .claude/ and .mcp.json
 
 ```bash
 # Copy the entire .claude folder
@@ -45,6 +61,16 @@ cp -r /tmp/launchpad-setup/.claude ./
 # Copy .mcp.json
 cp /tmp/launchpad-setup/.mcp.json ./
 ```
+
+### Step 4b: Write the .launchpad-source config
+
+Record the source so future syncs know where to pull from:
+
+```bash
+echo "<URL_OR_LOCAL_PATH>" > .claude/.launchpad-source
+```
+
+This file tells `/sync-launchpad`, `/coach`, and `/master-coach` where to pull from and push to. Without it, they fall back to the default GitHub URL.
 
 ### Step 4: Handle CLAUDE.md (the tricky part)
 
@@ -85,8 +111,9 @@ rm -rf /tmp/launchpad-setup
 ## Launchpad Setup Complete!
 
 ### What was added
-- .claude/ folder (7 agents, 6 skills, 3 rules, hooks, settings)
+- .claude/ folder (7 agents, 7 skills, 4 rules, hooks, settings)
 - .mcp.json
+- .claude/.launchpad-source (points to: <URL or local path>)
 
 ### CLAUDE.md
 - [Created new / Merged with existing]
@@ -99,6 +126,7 @@ rm -rf /tmp/launchpad-setup
 
 ## Error Handling
 
-- If git clone fails: "Can't reach the launchpad repo. Check your internet connection."
+- If git clone fails: "Can't reach the launchpad repo. Check your internet connection or verify the URL."
+- If local copy fails: "Launchpad master folder not found at <path>. Check the path is correct."
 - If copy fails: Report which files failed, continue with the rest.
 - If CLAUDE.md merge looks wrong: Keep both versions (rename existing to CLAUDE.md.backup) and let the user sort it out.
