@@ -37,6 +37,22 @@ When two different processes (different apps, different runtimes, different lang
 - Either implement for real, leave the function entirely unimplemented (so callers see an obvious gap), or raise `NotImplementedError` / `throw new Error('not implemented')` so the failure is loud and immediate.
 - Pattern to flag: any function with a one-line body that's just a log/print/console.log statement.
 
+## Edge Function / Serverless Fire-and-Forget Rules
+In edge runtimes (Cloudflare Workers, Cloudflare Pages Functions, Vercel Edge Functions, AWS Lambda, etc.) the runtime **kills the request context the moment your handler returns**. Any unawaited Promise — including the `void (async () => {...})()` IIFE pattern that works fine in Node — **dies mid-flight**, silently dropping whatever it was doing. This is a 100% silent data-loss pattern: no logs, no error, the work just doesn't happen.
+
+- If the background work MUST complete (file uploads, payment confirmations, audit logs that matter, cascading API calls), **`await` it** before returning the response. Yes, it slows the response. That is the cost.
+- If the platform exposes a "background work" API (`ctx.waitUntil(promise)` on CF Workers, Vercel `waitUntil()`), use it — that registers the promise with the runtime so it survives past the response.
+- The pattern that's safe in Node (`void doStuff().catch(() => {})` for advisory side effects) is **NOT safe** at the edge. Audit edge handlers for any unawaited promise that touches storage, an external API, or a downstream service.
+- Pattern to flag: any `void (async () => {...})()`, bare `.then()` without await, or unstored Promise inside a CF Worker / Pages Function / Edge route handler.
+
+## Ingest Pipeline / Validate-Before-Persist Rules
+When writing an ingest pipeline (file upload, webhook receiver, API import), order operations so that **persistence is the LAST step, after every gate has passed**. Otherwise a rejection (dedup, cap exceeded, validation fail) will leave orphaned writes — files on disk with no DB record, rows in a transient table that never got promoted, queue messages already acknowledged.
+
+- Order: parse → validate bytes/shape → preflight check (dedup, cap, business rules) → write to durable storage → commit row.
+- Anti-pattern (causes orphans): parse → write file → check dedup → reject (file remains on disk forever).
+- For each stateful side effect, ask: "If the next step rejects this record, can I undo this side effect cleanly?" If no, that side effect should move further down the pipeline.
+- Disk + DB is the most common offender. Network calls to external APIs (Stripe charges, email sends, Discord pings) are also stateful — cluster them at the end too.
+
 ## Streamlit-Specific Rules
 - NEVER use `use_container_width=True` on display components (`st.dataframe`, `st.data_editor`, `st.plotly_chart`, `st.altair_chart`, `st.pyplot`, `st.image`) — use `width="stretch"` instead. `use_container_width` is deprecated and will be removed after 2025-12-31.
 - `use_container_width=True` on interactive widgets (`st.button`, `st.text_input`, etc.) is still valid — only display components are affected.
