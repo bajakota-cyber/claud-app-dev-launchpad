@@ -41,3 +41,12 @@ The user pays per token. Wasting tokens on redundant reads, verbose output, or u
 - If you need to read 5 files, read them all in one message (parallel tool calls), not one at a time
 - If you need to run independent commands, run them in parallel
 - Group related edits to the same file into fewer Edit calls
+
+## Compact discipline (hard rules from real-session diagnostics)
+A prior session burned 5 hours of usage in ~3 wall hours running 1,200+ assistant turns with **zero** `/compact` invocations. Cumulative re-tokenization was the #1 cost driver. The rules below carry forward from that diagnostic.
+
+- **Suggest `/compact` to the user every ~30-50 assistant turns** in long sessions. Do not wait until the user notices the session is sluggish.
+- **Never let a session pass 100 turns without compacting.** Even mid-task. Compaction at 100 turns is cheaper than the alternative.
+- **Cap subagent return verbosity.** When spawning research/audit/dispatch agents, include "Return findings under 250 words" in the spawn prompt. Without that cap, workers return verbose reports that bloat orchestrator context.
+- **TodoWrite frugality.** Use TodoWrite for the high-level plan, not every 2-line edit. A previous session burned 59 TodoWrite calls — most were micro-updates. Aim for ≤ 10 calls per session.
+- **Re-read audit.** If you have re-read the same file 3+ times in a session, the file likely lives in context already. Verify before reading again. The diagnostic session re-read three TO files 17×, 16×, and 10× respectively — about half of all Read calls were duplicates.
