@@ -53,6 +53,13 @@ When writing an ingest pipeline (file upload, webhook receiver, API import), ord
 - For each stateful side effect, ask: "If the next step rejects this record, can I undo this side effect cleanly?" If no, that side effect should move further down the pipeline.
 - Disk + DB is the most common offender. Network calls to external APIs (Stripe charges, email sends, Discord pings) are also stateful — cluster them at the end too.
 
+## Reactive UI State Commit Rules (Streamlit, React, Vue)
+In reactive-UI frameworks, widget `value=` props (Streamlit `st.text_input(value=...)`, React controlled `<input value={...}>`) do NOT always commit synchronously back to session_state / store / signal during the same render pass. The committed value lags by one rerun.
+
+- **Never compute counters, labels, or auto-numbering by reading state that is being edited in the SAME render cycle.** Past failure: an "Option N" auto-numbering scheme that counted existing labeled sections to pick the next number — when the user added a 3rd unlabeled section, the count was stale and labeled it "Option 4" instead of "Option 3". Fix: count via render-order index (a local counter incremented inside the render loop), not by re-reading state.
+- **Never read `session_state[other_widget_key]` to drive a render decision when `other_widget_key` is being edited in the same pass.** Restructure so the dependent widget renders after the edit commits, or pass the live value through a parameter.
+- Pattern to flag: any `len([x for x in items if x.label])` or equivalent "count what's labeled" pattern used to compute the NEXT sequence number in a reactive UI render loop.
+
 ## Streamlit-Specific Rules
 - NEVER use `use_container_width=True` on display components (`st.dataframe`, `st.data_editor`, `st.plotly_chart`, `st.altair_chart`, `st.pyplot`, `st.image`) — use `width="stretch"` instead. `use_container_width` is deprecated and will be removed after 2025-12-31.
 - `use_container_width=True` on interactive widgets (`st.button`, `st.text_input`, etc.) is still valid — only display components are affected.
