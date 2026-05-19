@@ -24,21 +24,11 @@ This is a **template launchpad** for vibe-coding apps with Claude Code. Copy `.c
 - `/checkpoint` - Save current architectural state to memory
 - `/review` - Run a code review on recent changes
 - `/hygiene` - Full codebase audit: finds and fixes dead code, DRY violations, unused imports, and AI-generated code smells
-- `/sync-launchpad` - Pull latest agents, rules, and skills from the launchpad repo
+- `/sync-launchpad` - Pull latest agents, rules, and skills from the launchpad (GitHub OR local folder, auto-detected via `.claude/.launchpad-source`)
 - `/sync-launchpad --dry-run` - Preview what would change without applying
-- `/setup-launchpad` - First-time setup: pull the full launchpad into a new or existing project (from GitHub)
-- `/setup-launchpad-local` - Airgapped setup: install the launchpad from a local folder, no GitHub needed (for sharing with others or running offline)
-- `/master-coach` - Cross-project review: reads shortcomings from ALL projects, compiles findings, and fixes the launchpad centrally (run from launchpad repo only)
-
-## Launchpad Source: GitHub or Local Folder
-
-The launchpad can pull from either a GitHub repo (default) or a local folder (airgapped mode).
-
-The `.claude/.launchpad-source` file in each project tells the skills where to pull from:
-- A URL (`https://github.com/...`) → GitHub mode, uses git
-- A local path (`C:\claude-launchpad\`) → Local mode, uses file copies
-
-If the file doesn't exist, defaults to the GitHub repo. Use `/setup-launchpad-local` for airgapped/shared setups. To upgrade from local to GitHub later, see `INSTALL-ON-GITHUB.md` in the launchpad root.
+- `/setup-launchpad` - First-time setup: pull the full launchpad into a new or existing project (defaults to GitHub)
+- `/setup-launchpad-local` - Airgapped first-time setup: install the launchpad from a local folder, no GitHub needed
+- `/eod` - End-of-day wrap. Chains commit + checkpoint + press + coach in order. Use when finishing a session.
 
 ## Built-in MCP Tools
 The launchpad comes with these MCP servers pre-configured in `.mcp.json`:

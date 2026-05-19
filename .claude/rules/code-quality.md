@@ -24,19 +24,6 @@ description: Code quality standards for all files
 - A handler that only calls `setSubmitted(true)`, `setSuccess(true)`, shows a toast, or navigates — with no network call or persistence — is ALWAYS a bug. The form appears to work but silently discards the data.
 - Before shipping any form, trace the data end-to-end: client handler → network → server route → storage/delivery. If any link is missing, the form is broken.
 
-## Cross-Process SQLite Rules
-When two different processes (different apps, different runtimes, different languages) share a SQLite database file, write paths matter. The owning app almost always uses WAL mode (`PRAGMA journal_mode=WAL`), which keeps a separate `.db-wal` file alongside the main DB.
-
-- NEVER write to a SQLite DB owned by another process via raw-file overwrite (sql.js + `fs.writeFileSync`, byte-level mutation, etc). The write returns success and "commits" but the next read from the owner shows the old value because the WAL pages override the freshly-written main file. Silent data loss with NO error.
-- Route every cross-process write through the same library + connection setup the owning process uses. If the owner is Python+SQLAlchemy, write via a Python helper. If the owner is Node+better-sqlite3, write via a Node helper that opens with the same pragmas.
-- Smoke-test final DB state from the OWNER's process, not the writer's return value. A test that only checks "did the write call succeed?" cannot detect the WAL trap.
-- Pattern to flag: any `sql.js` / `fs.writeFileSync` / `Buffer` write to a `.db` file that another running process has open.
-
-## Stub Function Rules
-- A function whose entire body is `log_info(...) + return` (or `pass`, or `return undefined`) when callers treat it as a real side-effecting operation is a silent-broken stub. Tests pass, lint passes, CI passes — production silently does nothing.
-- Either implement for real, leave the function entirely unimplemented (so callers see an obvious gap), or raise `NotImplementedError` / `throw new Error('not implemented')` so the failure is loud and immediate.
-- Pattern to flag: any function with a one-line body that's just a log/print/console.log statement.
-
 ## Edge Function / Serverless Fire-and-Forget Rules
 In edge runtimes (Cloudflare Workers, Cloudflare Pages Functions, Vercel Edge Functions, AWS Lambda, etc.) the runtime **kills the request context the moment your handler returns**. Any unawaited Promise — including the `void (async () => {...})()` IIFE pattern that works fine in Node — **dies mid-flight**, silently dropping whatever it was doing. This is a 100% silent data-loss pattern: no logs, no error, the work just doesn't happen.
 
@@ -52,6 +39,19 @@ When writing an ingest pipeline (file upload, webhook receiver, API import), ord
 - Anti-pattern (causes orphans): parse → write file → check dedup → reject (file remains on disk forever).
 - For each stateful side effect, ask: "If the next step rejects this record, can I undo this side effect cleanly?" If no, that side effect should move further down the pipeline.
 - Disk + DB is the most common offender. Network calls to external APIs (Stripe charges, email sends, Discord pings) are also stateful — cluster them at the end too.
+
+## Cross-Process SQLite Rules
+When two different processes (different apps, different runtimes, different languages) share a SQLite database file, write paths matter. The owning app almost always uses WAL mode (`PRAGMA journal_mode=WAL`), which keeps a separate `.db-wal` file alongside the main DB.
+
+- NEVER write to a SQLite DB owned by another process via raw-file overwrite (sql.js + `fs.writeFileSync`, byte-level mutation, etc). The write returns success and "commits" but the next read from the owner shows the old value because the WAL pages override the freshly-written main file. Silent data loss with NO error.
+- Route every cross-process write through the same library + connection setup the owning process uses. If the owner is Python+SQLAlchemy, write via a Python helper. If the owner is Node+better-sqlite3, write via a Node helper that opens with the same pragmas.
+- Smoke-test final DB state from the OWNER's process, not the writer's return value. A test that only checks "did the write call succeed?" cannot detect the WAL trap.
+- Pattern to flag: any `sql.js` / `fs.writeFileSync` / `Buffer` write to a `.db` file that another running process has open.
+
+## Stub Function Rules
+- A function whose entire body is `log_info(...) + return` (or `pass`, or `return undefined`) when callers treat it as a real side-effecting operation is a silent-broken stub. Tests pass, lint passes, CI passes — production silently does nothing.
+- Either implement for real, leave the function entirely unimplemented (so callers see an obvious gap), or raise `NotImplementedError` / `throw new Error('not implemented')` so the failure is loud and immediate.
+- Pattern to flag: any function with a one-line body that's just a log/print/console.log statement.
 
 ## Reactive UI State Commit Rules (Streamlit, React, Vue)
 In reactive-UI frameworks, widget `value=` props (Streamlit `st.text_input(value=...)`, React controlled `<input value={...}>`) do NOT always commit synchronously back to session_state / store / signal during the same render pass. The committed value lags by one rerun.
