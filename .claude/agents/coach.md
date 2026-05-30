@@ -136,15 +136,26 @@ After Job 2 improvements, push them to the launchpad source so other project coa
    git add .claude/agents/[changed-file].md
    ```
 
-5. Commit with a clear message:
+5. Commit with a clear message (use the bajakota-cyber identity since the launchpad lives under that account):
    ```
-   git config user.email "bajakota@users.noreply.github.com"
+   git config user.email "bajakota-cyber@users.noreply.github.com"
    git config user.name "Dakota"
    git commit -m "coach: [what was improved and why]"
    ```
 
-6. Push:
-   ```
+6. Push using the bajakota-cyber PAT stored in `~/.claude/.env`. The project repo's gh CLI / OS keychain may be logged in as a different account (e.g. `odrpus` for ODRP) — without the explicit PAT the push lands on the wrong identity and gets rejected with 403. The token only lives inside the temp clone's local config; when the temp dir is removed in the cleanup step the token disappears with it. Never write the token to the project repo, never commit it, never echo it.
+
+   ```bash
+   # Source the env file. If BAJAKOTA_GH_TOKEN isn't set, FLAG and skip
+   # the push — do NOT fall back to the OS credential helper (that's
+   # almost certainly the wrong account and the push will fail or land
+   # under the wrong identity).
+   if [ -f "$HOME/.claude/.env" ]; then . "$HOME/.claude/.env"; fi
+   if [ -z "$BAJAKOTA_GH_TOKEN" ]; then
+     echo "FLAG-FOR-USER: BAJAKOTA_GH_TOKEN missing from ~/.claude/.env — cannot push launchpad updates from this project. See README for the PAT setup."
+     exit 0
+   fi
+   git -c "credential.helper=" remote set-url origin "https://x-access-token:${BAJAKOTA_GH_TOKEN}@github.com/bajakota-cyber/claud-app-dev-launchpad.git"
    git push origin main
    ```
 
