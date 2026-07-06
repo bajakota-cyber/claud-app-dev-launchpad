@@ -24,6 +24,7 @@ Do NOT spawn these as parallel subagents. Run them one at a time, in order.
 
 ### Step 1 — Commit any uncommitted work
 
+0. First check this is actually a git repo: `git rev-parse --is-inside-work-tree 2>/dev/null`. **If it is NOT a repo, skip this step entirely and note "N/A — not a git repo" in the final summary — this is normal for research projects, not an error.** (Press in Step 3 must then work from the conversation/session context instead of `git log`.)
 1. Run `git status` to see what's outstanding.
 2. If there are uncommitted changes:
    - Stage only the files that belong in this commit (avoid `git add -A` if there are .env / secrets / build artifacts loose).
