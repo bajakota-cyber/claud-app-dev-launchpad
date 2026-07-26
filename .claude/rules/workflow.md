@@ -22,6 +22,23 @@ If you can't test (no Chrome MCP, deploy still pending after 2 min), state so ex
 
 Backend-only changes (SQL, models, services with no UI surface) can be verified via Supabase MCP queries instead of Chrome — but verification still happens before "done."
 
+### PWA / SPA runtime-mount check after every deploy — MANDATORY
+
+After ANY change that touches: **web boot code, `pubspec.yaml` / `package.json` / lockfile deps, PWA behavior (service worker, manifest, `index.html`), or that runs on push-to-main and auto-deploys** — a build-passes + CI-green signal is NOT sufficient. The build compiles the bundle; it does not exercise the runtime. A transitive dep can crash on mount (unguarded `.init()`, missing browser API, top-level side-effect that throws) with zero build-time or CI signal — the app just goes down live.
+
+Required after every such deploy:
+1. Wait for CI to finish deploying (~60-120s depending on pipeline)
+2. Load the deployed URL in the browser (Chrome MCP or equivalent — ~30 seconds)
+3. Confirm the framework root actually mounted:
+   - Flutter Web: `<flutter-view>` present AND first-frame paint visible (not just white screen)
+   - React / Vue / Angular: root component tree rendered (not just empty `<div id="root">`)
+   - Any framework: no red console errors on first paint, expected landing UI visible
+4. Only then say "deployed" or "shipped"
+
+If you can't runtime-verify (no browser MCP, deploy still pending after 2 min), say so explicitly: "Built + pushed but not yet runtime-verified — please confirm the deployed URL mounts." Do NOT claim "deployed" from a green build alone.
+
+**Skipping this once cost the ODRP session 20+ minutes and took the live PWA down** — a transitive dep (`passkeys_web`) crashed on mount via an unguarded `.init()` call. Both `flutter build web` and GitHub Actions went green; only loading the deployed URL would have caught it.
+
 ## Agent Triggers — MUST follow, no exceptions
 
 | Trigger | Agent | When |
