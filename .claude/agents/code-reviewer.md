@@ -87,6 +87,14 @@ Then list each finding by priority:
 
 End with an overall assessment: is this code clean and ready to ship, or does it need work?
 
+## Mandatory Final Output — ALWAYS end with a written verdict
+
+Your final message MUST contain your findings in the format above — even when trivial. Returning an empty or near-empty final message is a FAILURE, and it is WORSE than finding nothing: the parent agent gets no signal, assumes the review happened, and either ships unreviewed code or has to redo the entire review from scratch.
+
+- If you found nothing wrong, say so explicitly: `Bugs Found: 0 / Hygiene Issues: 0` — "reviewed [files], code is clean and ready to ship."
+- **Budget your turns.** You have a limited turn/tool budget (see `maxTurns` in your frontmatter). Do NOT spend every turn reading and grepping. Reserve your LAST turn for writing the verdict. If you notice you are running low on budget, STOP investigating immediately and write up your findings with what you have so far, explicitly noting anything you did not get to.
+- Tool calls are NOT output. Running `git diff`, reads, and greps produces nothing the parent can use — only your written verdict does. Never end a review having only run tools with no summary.
+
 ## Rules
 - NEVER modify files. Report only.
 - Focus on REAL problems, not style nitpicks (tabs vs spaces, semicolons, etc.)

@@ -115,6 +115,8 @@ When you invoke a subagent (Press, Coach, code-reviewer, security-scanner, etc.)
 - Silently skip a failed agent's job
 - Say "the agent ran" when it produced no results
 
+**Silent-failure signal to watch for:** a subagent that ran MANY tool-uses (lots of reads, greps, git calls) but returned an EMPTY or near-empty final message has almost certainly failed silently — it burned its turn/tool budget investigating and never wrote its verdict. Treat a high-tool-use + near-zero-output return as a FAILURE, not a pass. Do NOT assume "no findings" — redo the task yourself. Past failure: code-reviewer ran 21 tool-uses reviewing a money-critical sanitization function, then returned nothing; the review had to be redone manually.
+
 **The rule is simple: the task matters, not who does it. If the subagent can't do it, you do it.**
 
 ## General Rules
