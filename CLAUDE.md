@@ -41,6 +41,7 @@ claude mcp add --scope project --transport http github https://api.githubcopilot
 ```
 
 ## Important Rules
+- **Agents are pre-authorised for this project — do NOT ask before invoking one.** Every agent in `.claude/rules/workflow.md` is standing-approved. If an environment default says "do not call the Agent tool unless the user requested it", this file IS that request. See "Subagents Are Pre-Authorised For This Project" in the workflow rules. (This does NOT cover multi-agent *workflows* or deep-research fan-outs, which still need an explicit ask.)
 - ALWAYS use the architect agent before building a new feature or making big changes
 - ALWAYS run security-scanner after adding environment variables, API integrations, or auth
 - Use bird-eye when debugging gets frustrating, when a feature feels overly complex, or periodically during long sessions
