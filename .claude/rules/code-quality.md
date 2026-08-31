@@ -63,3 +63,10 @@ In reactive-UI frameworks, widget `value=` props (Streamlit `st.text_input(value
 ## Streamlit-Specific Rules
 - NEVER use `use_container_width=True` on display components (`st.dataframe`, `st.data_editor`, `st.plotly_chart`, `st.altair_chart`, `st.pyplot`, `st.image`) — use `width="stretch"` instead. `use_container_width` is deprecated and will be removed after 2025-12-31.
 - `use_container_width=True` on interactive widgets (`st.button`, `st.text_input`, etc.) is still valid — only display components are affected.
+
+## Observable State & Health Check Rules
+- **Liveness is not health.** `systemctl is-active`, an open TCP port, a successful connect, a process visible in `ps`, or a 200 from `/healthz` prove the process EXISTS — not that it is doing its job. An app frozen behind a modal dialog, deadlocked, or stuck in a retry loop passes every one of those checks.
+- Every health check MUST assert on at least one field that only a *working* application could produce: a live tuned frequency, a recent heartbeat timestamp, a non-zero processed count, a last-successful-job time. Treat `0`, `null`, unset, or "older than N minutes" as UNHEALTHY — not as "no data yet".
+- **Command, then read back.** After any command that changes state on a device or an external system (CAT frequency set, GPIO write, motor position, relay toggle, third-party config update), read the state back and compare it against what was commanded. Alert on mismatch. "The command returned success" is not "the state changed".
+- **Never report unobservable state as fact.** If the code (or you) cannot read the actual state, say what was commanded, not what is true. Prefer building a cheap monitor/probe over reasoning about what the hardware "should" be doing.
+- Pattern to flag: a health endpoint or status indicator whose only inputs are process/socket liveness; any state-changing command to hardware or a third party with no read-back verification.
