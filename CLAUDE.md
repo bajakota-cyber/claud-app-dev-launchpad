@@ -29,6 +29,7 @@ This is a **template launchpad** for vibe-coding apps with Claude Code. Copy `.c
 - `/setup-launchpad` - First-time setup: pull the full launchpad into a new or existing project (defaults to GitHub)
 - `/setup-launchpad-local` - Airgapped first-time setup: install the launchpad from a local folder, no GitHub needed
 - `/eod` - End-of-day wrap. Chains commit + checkpoint + press + coach in order. Use when finishing a session.
+- `/master-coach` - Cross-project review: reads shortcomings from ALL projects, compiles findings, and fixes the launchpad centrally (run from the launchpad repo only)
 
 ## Built-in MCP Tools
 The launchpad comes with these MCP servers pre-configured in `.mcp.json`:
