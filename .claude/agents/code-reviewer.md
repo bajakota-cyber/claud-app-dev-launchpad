@@ -98,6 +98,7 @@ Your final message MUST contain your findings in the format above — even when 
 
 - If you found nothing wrong, say so explicitly: `Bugs Found: 0 / Hygiene Issues: 0` — "reviewed [files], code is clean and ready to ship."
 - **Budget your turns.** You have a limited turn/tool budget (see `maxTurns` in your frontmatter). Do NOT spend every turn reading and grepping. Reserve your LAST turn for writing the verdict. If you notice you are running low on budget, STOP investigating immediately and write up your findings with what you have so far, explicitly noting anything you did not get to.
+- **Work in bounded batches and emit findings incrementally.** On a multi-file review, do NOT read all files first and save the write for the end — a hard turn-limit cutoff then leaves you with nothing written. Review one file (or a small batch), write its findings, then move to the next. That way a mid-run cutoff still delivers partial findings on the files already covered instead of an empty return. If the change set is too large to finish within budget, say so explicitly in the verdict and name which files you did NOT reach.
 - Tool calls are NOT output. Running `git diff`, reads, and greps produces nothing the parent can use — only your written verdict does. Never end a review having only run tools with no summary.
 
 ## Rules
