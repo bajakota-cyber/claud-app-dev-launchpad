@@ -1,6 +1,6 @@
 ---
 name: eod
-description: End-of-day wrap. Chains commit + checkpoint + press + coach in sequence to close out a work session cleanly. Use at the end of a build session.
+description: End-of-day wrap. Chains commit + checkpoint + press + coach + housekeeping in sequence to close out a work session cleanly. Use at the end of a build session.
 user-invocable: true
 disable-model-invocation: true
 allowed-tools: Read, Glob, Grep, Bash, Edit, Write, Agent, TodoWrite
@@ -54,14 +54,29 @@ Invoke the `coach` agent. Coach will:
 
 If `.claude/.coach-due` exists, delete it after coach finishes.
 
-### Step 5 — Final summary
+### Step 5 — Housekeeping (branches + copies in sync)
+
+Invoke the `/housekeeping` skill. It finds branch/fork divergence the operator
+cannot see (they usually do not know a branch exists), consolidates stray branches
+back to the trunk WITHOUT losing work, and verifies the three copies match —
+GitHub, the local working directory, and wherever the code is deployed (VM/server).
+
+Two things it will NOT do on its own: delete branches or force-push (those are
+destructive — it drafts them for the operator's approval), and touch a branch that
+is intentional. If it surfaces branches needing an intentional-vs-abandoned
+decision, carry those into the final summary for the operator.
+
+### Step 6 — Final summary
 
 Give the user a short close-out (under 200 words):
 - What was committed (commit SHA + one-line summary)
 - What the checkpoint captured
 - What Press logged
 - What Coach pushed upstream (if anything)
-- Anything still open or flagged for tomorrow
+- What Housekeeping found: branches reconciled/flagged, and whether GitHub = local =
+  deployment target now
+- Anything still open or flagged for tomorrow (including any branch deletions awaiting
+  approval)
 
 ## Failure handling
 
