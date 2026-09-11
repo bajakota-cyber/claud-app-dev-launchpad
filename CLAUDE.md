@@ -28,7 +28,8 @@ This is a **template launchpad** for vibe-coding apps with Claude Code. Copy `.c
 - `/sync-launchpad --dry-run` - Preview what would change without applying
 - `/setup-launchpad` - First-time setup: pull the full launchpad into a new or existing project (from GitHub)
 - `/setup-launchpad-local` - Airgapped setup: install the launchpad from a local folder, no GitHub needed (for sharing with others or running offline)
-- `/eod` - End-of-day wrap. Chains commit + checkpoint + press + coach in order. Use when finishing a session.
+- `/eod` - End-of-day wrap. Chains commit + checkpoint + press + coach + housekeeping in order. Use when finishing a session.
+- `/housekeeping` - Find and reconcile branch/fork divergence and keep every copy of the code in sync (GitHub, local working dir, and the deployment target/VM). Consolidates stray branches back to the trunk without losing work. Runs at EOD (via coach) and whenever branches may have drifted.
 - `/master-coach` - Cross-project review: reads shortcomings from ALL projects, compiles findings, and fixes the launchpad centrally (run from launchpad repo only)
 
 ## Launchpad Source: GitHub or Local Folder
