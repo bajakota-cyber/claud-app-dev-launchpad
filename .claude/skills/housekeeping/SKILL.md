@@ -1,6 +1,6 @@
 ---
 name: housekeeping
-description: Find and reconcile branch/fork divergence and keep every copy of the code in sync — GitHub, the local working directory, and wherever the code is actually deployed (a VM, a server). Run at EOD and whenever branches may have drifted. Consolidates stray branches back to the trunk WITHOUT losing work, and reconciles the three copies so they match.
+description: Find and reconcile branch/fork divergence, keep every copy of the code in sync (GitHub, local working directory, and wherever the code is deployed — a VM/server), and tidy the project scratchpad so valuable work isn't stranded unbacked in a "good-idea graveyard." Run at EOD and whenever branches may have drifted. Consolidates stray branches back to the trunk WITHOUT losing work, reconciles the three copies, and rescues/indexes/prunes the scratchpad.
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Edit, Write, Agent, TodoWrite
 argument-hint: "[optional: repo path, or a note]"
@@ -104,11 +104,39 @@ Per repo, drive toward **GitHub = local = deployment target** on the trunk:
   overwriting. If the deploy target is ahead, pull it back into the repo first; if the
   repo is ahead, deploy. Never blind-overwrite either way.
 
-### 5. Report (plain language — the operator is not a coder)
+### 5. Tidy the scratchpad (the good-idea graveyard)
+Almost every project grows a `scratchpad/` folder (plus the session's temp scratchpad) full
+of working docs, plans, half-ideas, and one-off scripts. It is NOT tracked by git, so anything
+valuable in it is unbacked and easy to lose — and it silently becomes a graveyard nobody
+revisits. Sweep it:
+- **Inventory** everything in the scratchpad.
+- **Classify** each file:
+  - **LIVE** (a plan/idea still needing action): it must NOT live only here. Move it to a
+    tracked home (`docs/`, the code, `tests/`) so it's backed up on GitHub.
+  - **Belongs to another repo/product** (branding, research, an artifact for a sibling
+    project): move it to that repo — the same stranded-work trap as branches.
+  - **Archival** (a record of shipped/decided work): keep it, or confirm the engineering
+    journal already captures it; index it either way.
+  - **Throwaway** (one-off diagnostic/test scripts whose work has shipped, disk dumps,
+    tarballs, junk): delete.
+- **Rescue before you delete.** Scratchpad is unbacked, so a delete is permanent. Preserve
+  anything live/valuable to a tracked home FIRST. When unsure whether something is dead,
+  index it rather than delete it. Deleting many files at once is destructive — same rule as
+  branches: preserve the keepers, then clear the clear throwaway.
+- **Leave an INDEX.** Write or refresh a short `scratchpad/INDEX.md` describing what remains
+  and why (live vs archival, and where moved items went), so it never becomes mystery clutter.
+
+Core principle: **nothing live or valuable should exist ONLY in the scratchpad.** The
+scratchpad is for ephemera; the moment a note becomes a plan you'll act on or an artifact
+worth keeping, it graduates to a tracked home.
+
+### 6. Report (plain language — the operator is not a coder)
 - Every branch found, and for each: **kept** (why — intentional/trunk) or **retired**
   (and where its work went).
 - Any work rescued, from where, to where.
 - Whether GitHub = local = deployment target now, per repo — say it plainly.
+- Scratchpad: what was rescued (and to where), what was tossed, what remains (with the
+  refreshed INDEX).
 - Anything still needing the operator's decision (intentional-vs-abandoned calls,
   approvals for deletes).
 Assume the operator did not know these branches existed; explain what you found.
@@ -119,3 +147,5 @@ Assume the operator did not know these branches existed; explain what you found.
 - Whenever the deployed app and the code seem out of sync ("I fixed that already but
   I don't see it") — that symptom is almost always a deploy that never happened or a
   branch that never merged.
+- Whenever the scratchpad has grown large or unreviewed — run the scratchpad sweep even
+  if branches are clean, so valuable notes/plans/artifacts don't sit unbacked in a graveyard.
