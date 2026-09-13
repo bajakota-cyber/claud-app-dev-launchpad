@@ -79,6 +79,11 @@ An `enable` / `apply` / `reload` call on a scheduler is usually a **full recompu
 - Either implement for real, leave the function entirely unimplemented (so callers see an obvious gap), or raise `NotImplementedError` / `throw new Error('not implemented')` so the failure is loud and immediate.
 - Pattern to flag: any function with a one-line body that's just a log/print/console.log statement.
 
+## Dispatch Chain Rules — A Bare Final Branch Inherits the Previous One's Behaviour
+- Every `if`/`elif` chain that selects behaviour by backend, mode, role, driver, or environment MUST end in an explicit `else` that raises — or in a final branch carrying the SAME discriminator guard every earlier branch tests. A bare trailing `else:`, or a last `elif` that checks only half the condition, silently hands an unlisted case the previous branch's behaviour.
+- This failure points the blame somewhere else. When the wrong branch drives an external component (a modem, a device, a third-party API), the symptom shows up over THERE — so instrument your own send/receive path per frame or per call BEFORE theorising about what the other side is doing.
+- Pattern to flag: a dispatch chain whose final branch omits the discriminator (backend/mode/driver) that every earlier branch tests. Past failure: a gateway's main loop chose roster behaviour with `if modem == "mercury" / elif arq and caller / elif <timer>`; the last branch had no backend guard, so the ARQ listener role silently ran the socket backend's 4-second roster push — two 10-minute test runs burned and the modem wrongly suspected.
+
 ## Reactive UI State Commit Rules (Streamlit, React, Vue)
 In reactive-UI frameworks, widget `value=` props (Streamlit `st.text_input(value=...)`, React controlled `<input value={...}>`) do NOT always commit synchronously back to session_state / store / signal during the same render pass. The committed value lags by one rerun.
 
