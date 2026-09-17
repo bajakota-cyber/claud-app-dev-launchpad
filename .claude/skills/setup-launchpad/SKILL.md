@@ -99,6 +99,32 @@ Check if `.gitignore` exists. If it does, make sure it includes:
 
 If `.gitignore` doesn't exist, copy the one from the launchpad repo.
 
+### Step 5b: Verify git commit identity (privacy — see rules/git-identity.md)
+
+A personal email in `git config user.email` gets baked into every commit and pushed to
+GitHub. Check it now, before any commit is made:
+
+```bash
+git config user.email
+git config user.name
+```
+
+- If the email is a **real inbox** (`@gmail.com`, `@company.com`, an ISP/work address) — or
+  is empty — STOP and tell the user: their commits would expose that address publicly. Have
+  them set their GitHub **no-reply** instead (found at GitHub → Settings → Emails → "Keep my
+  email addresses private", shape `<ID>+<username>@users.noreply.github.com`):
+
+  ```bash
+  git config user.name  "your-handle"
+  git config user.email "<ID>+<username>@users.noreply.github.com"
+  ```
+
+  Do NOT hardcode a specific address here — it's per-account, and it's the user's to choose.
+- If it's already a `*@users.noreply.github.com`, it's fine — continue.
+- Also remind them (once per GitHub account) to enable **both** email guards at Settings →
+  Emails: "Keep my email addresses private" and "Block command line pushes that expose my
+  email." See `.claude/rules/git-identity.md` for the full policy.
+
 ### Step 6: Cleanup
 
 ```bash
@@ -111,7 +137,7 @@ rm -rf /tmp/launchpad-setup
 ## Launchpad Setup Complete!
 
 ### What was added
-- .claude/ folder (7 agents, 7 skills, 4 rules, hooks, settings)
+- .claude/ folder (agents, skills, rules incl. git-identity, hooks, settings)
 - .mcp.json
 - .claude/.launchpad-source (points to: <URL or local path>)
 
