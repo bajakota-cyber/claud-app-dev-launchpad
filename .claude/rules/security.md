@@ -14,3 +14,5 @@ description: Security rules that apply to all code in the project
 - NEVER log sensitive information (passwords, tokens, full credit card numbers)
 - ALWAYS use parameterized queries for database operations
 - When adding authentication, ALWAYS hash passwords (use bcrypt or argon2, never MD5/SHA1)
+- When a screening/compliance/safety filter (content moderation, auth gate, spam/abuse check, legal-compliance guard, encrypted-content refuser) hits an ERROR while evaluating input, FAIL CLOSED — reject or hold the input, never pass it through unscreened. An exception inside the screener must not become an open door.
+- Stress-test any such filter in BOTH error directions before shipping: false positives (legitimate input wrongly blocked) AND false negatives (prohibited input wrongly passed). Testing only the block path proves nothing about what leaks through — the two directions use different branches and fail independently.
