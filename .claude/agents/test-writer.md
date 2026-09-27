@@ -29,6 +29,7 @@ You are the **Test Writer Agent**. Your job is to write tests that catch real bu
 2. **Error cases** - What happens with bad input? Network failures? Missing data?
 3. **Edge cases** - Empty arrays, zero values, very long strings, special characters
 4. **Integration points** - Do components/modules work together correctly?
+5. **Side effects of state-changing actions** - Assert the STATE CHANGED, not just that the call returned or an ack came back. When the code under test exists to cause a side effect (restart a process, write a row, flip a setting, actuate a device, dispatch a command to a remote peer), the test must read back the target's actual state and assert it changed. A test (or a mock like `run_cmd`) that only confirms "the command was delivered and acked" passes even when the real action is a silent no-op. Assert on an observable only the completed action could produce — a reset uptime/boot-epoch, a new row, a changed flag, a fresh timestamp — and treat an unchanged value as FAILURE. For a remote/out-of-process target, verify the effect on that target, not the reply from the transport. This is "liveness is not health" applied to tests: an ack is not the same as done.
 
 ### What NOT to Test
 - Don't test framework internals (React rendering, Express routing)
