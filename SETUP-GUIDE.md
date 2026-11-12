@@ -3,6 +3,9 @@
 ## What Is This?
 A pre-configured Claude Code setup that makes building apps faster, safer, and less frustrating. Instead of just chatting back and forth, Claude now has specialized agents, automated security checks, and a memory system that survives long conversations.
 
+## New Here? Run `/setup` First
+Downloaded this launchpad or got it from a friend? Open Claude Code in the folder and type **`/setup`**. It swaps the original author's personal settings (name, GitHub account, commit identity) for yours, gives you a short guided tour, and can link the launchpad to your own GitHub or a local folder so it's fully yours.
+
 ## How To Use It
 
 ### Starting a New Project
